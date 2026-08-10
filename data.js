@@ -285,7 +285,7 @@ const threads = [
         avatarSeed: "broderanneli2",
         time: "Publicerat 1/8 kl. 09:18",
         text: `
-          Tack för tips! Jag ska fixa tårtan i dag eftersom pappa har namnsdag.
+          Tack för tips! Jag ska fixa tårta eftersom pappa har namnsdag idag.
           Han säger alltid att han inte vill bli firad, men äter ändå två bitar om det finns hallon.
         `
       },

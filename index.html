@@ -111,6 +111,14 @@
       font-size: 22px;
     }
 
+    .secret-icon {
+      cursor: help;
+    }
+
+    .secret-icon:hover {
+      outline: 2px solid var(--yellow);
+    }
+
     .thread-title {
       color: var(--link);
       font-weight: bold;
@@ -266,6 +274,76 @@
       font-size: 14px;
     }
 
+    .login-button {
+      width: 100%;
+      background: var(--yellow);
+      color: #111;
+      border: none;
+      padding: 10px 12px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+
+    .login-button:hover {
+      background: #ffd76b;
+    }
+
+    .popup-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 999;
+      padding: 20px;
+    }
+
+    .popup {
+      max-width: 520px;
+      margin: 10vh auto;
+      background: #1c1c1c;
+      color: var(--text);
+      border: 2px solid var(--yellow);
+      box-shadow: 0 0 30px rgba(0,0,0,.7);
+    }
+
+    .popup-title {
+      background: var(--red);
+      color: white;
+      padding: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .popup-content {
+      padding: 16px;
+      line-height: 1.5;
+    }
+
+    .popup input {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0 12px;
+      background: #111;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .popup button {
+      background: var(--yellow);
+      border: none;
+      padding: 10px 14px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-right: 6px;
+      margin-top: 6px;
+    }
+
+    .error {
+      color: #ffb4b4;
+      margin-top: 10px;
+    }
+
     a {
       color: var(--link);
     }
@@ -304,7 +382,7 @@
               Hej alla brödvänner!<br><br>
               Jag undrar om någon kan tipsa om ett riktigt bra bageri där man kan köpa färska bullar lite senare på dagen.
               Jag spelar bridge varje tisdag, torsdag och fredag klockan 19.00 och brukar ta med fika till gruppen.
-              Det är mycket uppskattat, särskilt av Gunnar som alltid tar två om det finns kardemumma.<br><br>
+              Det är mycket uppskattat, särskilt av Bengt som alltid tar två om det finns kardemumma.<br><br>
               Jag vill helst handla så nära inpå som möjligt och åka direkt till lokalen, så bullarna fortfarande känns nybakade.
               Bageriet behöver därför ha öppet till åtminstone 18.00. Gärna trevlig personal också, sådant märker man.
             </div>
@@ -640,6 +718,95 @@
 
         <div class="locked-note">Tråden är låst. Nya kommentarer kan inte publiceras.</div>
       </section>
+
+      <section id="thread7" class="thread-view">
+        <div class="back" onclick="goBack()">← Tillbaka till trådlistan</div>
+
+        <article class="post">
+          <div class="user">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=BroderAnneli" alt="">
+            <div>
+              <div class="username">BröderAnneli</div>
+              <div class="role">Medlem</div>
+            </div>
+          </div>
+          <div class="post-main">
+            <div class="post-time">Publicerat 3/5 kl. 11:04</div>
+            <div class="post-text">
+              Jag brukar inte be om tårtrådshjälp, men nu behöver jag det.
+              Min pappa är ganska traditionell och tycker bäst om grädde, bär och sådant som inte känns för modernt.
+            </div>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="user">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=TartTage" alt="">
+            <div>
+              <div class="username">TårtTage</div>
+              <div class="role">Veteran</div>
+            </div>
+          </div>
+          <div class="post-main">
+            <div class="post-time">Publicerat 3/5 kl. 11:26</div>
+            <div class="post-text">
+              Prinsesstårta är väl det säkra kortet. Går nästan alltid hem hos pappor.
+            </div>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="user">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=BroderAnneli2" alt="">
+            <div>
+              <div class="username">BröderAnneli</div>
+              <div class="role">Medlem</div>
+            </div>
+          </div>
+          <div class="post-main">
+            <div class="post-time">Publicerat 1/8 kl. 09:18</div>
+            <div class="post-text">
+              Tack för tips! Jag ska fixa tårtan i dag eftersom pappa har namnsdag den 1 augusti.
+              Han säger alltid att han inte vill bli firad, men äter ändå två bitar om det finns hallon.
+            </div>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="user">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=GraddGunnar" alt="">
+            <div>
+              <div class="username">GräddGunnar</div>
+              <div class="role">Registrerad</div>
+            </div>
+          </div>
+          <div class="post-main">
+            <div class="post-time">Publicerat 1/8 kl. 10:02</div>
+            <div class="post-text">
+              Då är det klart. Kör grädde och hallon. Krångla inte till det.
+            </div>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="user">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=BroderAnneli3" alt="">
+            <div>
+              <div class="username">BröderAnneli</div>
+              <div class="role">Medlem</div>
+            </div>
+          </div>
+          <div class="post-main">
+            <div class="post-time">Publicerat 7/8 kl. 16:12</div>
+            <div class="post-text">
+              Uppdatering: det blev gräddtårta med hallon. Pappa blev rörd, trots att han först påstod att han bara ville ha kaffe.
+              Jag sparar den här tråden till nästa år.
+            </div>
+          </div>
+        </article>
+
+        <div class="locked-note">Tråden är låst. Nya kommentarer kan inte publiceras.</div>
+      </section>
     </main>
 
     <aside>
@@ -653,6 +820,8 @@
           <span class="pill">Bagerier</span>
           <span class="pill">Uppsala</span>
           <span class="pill">Rykten</span>
+
+          <button class="login-button" onclick="openLogin()">Logga in</button>
         </div>
       </section>
 
@@ -663,6 +832,49 @@
         <div id="latestNews" class="side-content"></div>
       </section>
     </aside>
+  </div>
+
+  <div id="croissantPopup" class="popup-backdrop">
+    <div class="popup">
+      <div class="popup-title">Favorit markerad</div>
+      <div class="popup-content">
+        <p>Bröder Anneli gillar detta allra mest.</p>
+        <p><b>_ _ _ 9</b></p>
+        <button onclick="closeCroissantPopup()">Stäng</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="loginPopup" class="popup-backdrop">
+    <div class="popup">
+      <div class="popup-title">Logga in på Brödnytt Forum</div>
+      <div class="popup-content">
+        <label>Användarnamn</label>
+        <input id="loginUsername" type="text" autocomplete="off">
+
+        <label>Lösenord</label>
+        <input id="loginPassword" type="password" autocomplete="off">
+
+        <label>Säkerhetskod</label>
+        <input id="loginCode" type="text" inputmode="numeric" autocomplete="off">
+
+        <button onclick="tryLogin()">Logga in</button>
+        <button onclick="closeLogin()">Stäng</button>
+
+        <div id="loginError" class="error"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="successPopup" class="popup-backdrop">
+    <div class="popup">
+      <div class="popup-title">Inloggning lyckades</div>
+      <div class="popup-content">
+        <p><b>Välkommen tillbaka.</b></p>
+        <p id="successText"></p>
+        <button onclick="closeSuccess()">Stäng</button>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -732,6 +944,17 @@
         latestUser: "LevainLisa",
         latestDate: "2026-08-03T20:44:00",
         latestLabel: "2026-08-03"
+      },
+      {
+        id: "thread7",
+        icon: "🎂",
+        title: "Tips på tårta till pappa på namnsdagen?",
+        desc: "Bröder Anneli behöver baka något som känns lagom högtidligt.",
+        replies: 5,
+        views: 632,
+        latestUser: "BröderAnneli",
+        latestDate: "2026-08-07T16:12:00",
+        latestLabel: "7/8"
       }
     ];
 
@@ -746,9 +969,13 @@
       const threadList = document.getElementById("threadList");
 
       threadList.innerHTML = sortedThreads.map(function(thread) {
+        const iconHtml = thread.id === "thread1"
+          ? `<div class="icon secret-icon" onclick="showCroissantPopup(event)">${thread.icon}</div>`
+          : `<div class="icon">${thread.icon}</div>`;
+
         return `
           <div class="forum-row" onclick="openThread('${thread.id}')">
-            <div class="icon">${thread.icon}</div>
+            ${iconHtml}
             <div>
               <div class="thread-title">${thread.title}</div>
               <div class="thread-desc">${thread.desc}</div>
@@ -787,6 +1014,82 @@
 
       document.getElementById("front").style.display = "block";
       window.scrollTo(0, 0);
+    }
+
+    function showCroissantPopup(event) {
+      event.stopPropagation();
+      document.getElementById("croissantPopup").style.display = "block";
+    }
+
+    function closeCroissantPopup() {
+      document.getElementById("croissantPopup").style.display = "none";
+    }
+
+    function openLogin() {
+      document.getElementById("loginPopup").style.display = "block";
+      document.getElementById("loginError").textContent = "";
+    }
+
+    function closeLogin() {
+      document.getElementById("loginPopup").style.display = "none";
+    }
+
+    async function tryLogin() {
+      const username = document.getElementById("loginUsername").value.trim().toLowerCase();
+      const password = document.getElementById("loginPassword").value.trim().toLowerCase();
+      const code = document.getElementById("loginCode").value.trim();
+    
+      const loginString = username + "|" + password + "|" + code;
+    
+      const encryptedMessage = "KMbnLuNxfHb6C30DGRRXKGdxZ6VKtbCSjlEWSWO9hghiyTu5udsG5b1L4FzmGNNksEUDlBuzoiw3n1Vm";
+      const ivString = "sQ0PCgECAwQFBgcI";
+    
+      try {
+        const decodedMessage = await decryptMessage(loginString, encryptedMessage, ivString);
+    
+        document.getElementById("loginPopup").style.display = "none";
+        document.getElementById("successText").innerText = decodedMessage;
+        document.getElementById("successPopup").style.display = "block";
+      } catch (error) {
+        document.getElementById("loginError").textContent = "Fel inloggning. Kontrollera användarnamn, lösenord och säkerhetskod.";
+      }
+    }
+    
+    async function decryptMessage(loginString, encryptedMessage, ivString) {
+      const encoder = new TextEncoder();
+    
+      const keyMaterial = await crypto.subtle.digest(
+        "SHA-256",
+        encoder.encode(loginString)
+      );
+    
+      const key = await crypto.subtle.importKey(
+        "raw",
+        keyMaterial,
+        { name: "AES-GCM" },
+        false,
+        ["decrypt"]
+      );
+    
+      const encryptedBytes = Uint8Array.from(atob(encryptedMessage), function(c) {
+        return c.charCodeAt(0);
+      });
+    
+      const iv = Uint8Array.from(atob(ivString), function(c) {
+        return c.charCodeAt(0);
+      });
+    
+      const decryptedBytes = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: iv },
+        key,
+        encryptedBytes
+      );
+    
+      return new TextDecoder().decode(decryptedBytes);
+    }
+    
+    function closeSuccess() {
+      document.getElementById("successPopup").style.display = "none";
     }
 
     renderThreadList();

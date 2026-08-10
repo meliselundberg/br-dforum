@@ -254,7 +254,7 @@ const threads = [
     id: "thread7",
     icon: "🎂",
     title: "Tips på tårta till pappa på namnsdagen?",
-    latestDate: "2026-08-07T16:12:00",
+    latestDate: "2025-08-07T16:12:00",
     latestLabel: "7/8",
     views: 632,
     posts: [

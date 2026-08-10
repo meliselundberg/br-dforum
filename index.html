@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Brödbacken Forum</title>
+  <title>Brödnytt Forum</title>
 
   <style>
     :root {
@@ -18,9 +18,7 @@
       --link: #f3cf71;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -43,7 +41,7 @@
 
     h1 {
       margin: 0;
-      font-size: 30px;
+      font-size: 34px;
       color: var(--yellow);
       letter-spacing: 1px;
     }
@@ -64,9 +62,7 @@
     }
 
     @media (max-width: 800px) {
-      .wrap {
-        grid-template-columns: 1fr;
-      }
+      .wrap { grid-template-columns: 1fr; }
     }
 
     .box {
@@ -93,13 +89,8 @@
       cursor: pointer;
     }
 
-    .forum-row:first-of-type {
-      border-top: none;
-    }
-
-    .forum-row:hover {
-      background: var(--panel2);
-    }
+    .forum-row:first-of-type { border-top: none; }
+    .forum-row:hover { background: var(--panel2); }
 
     .icon {
       width: 38px;
@@ -128,18 +119,11 @@
       font-size: 13px;
     }
 
-    .latest b {
-      color: var(--text);
-    }
+    .latest b { color: var(--text); }
 
     @media (max-width: 700px) {
-      .forum-row {
-        grid-template-columns: 42px 1fr;
-      }
-
-      .stat, .latest {
-        display: none;
-      }
+      .forum-row { grid-template-columns: 42px 1fr; }
+      .stat, .latest { display: none; }
     }
 
     .side-content {
@@ -160,9 +144,7 @@
       font-size: 12px;
     }
 
-    .thread-view {
-      display: none;
-    }
+    .thread-view { display: none; }
 
     .back {
       display: inline-block;
@@ -181,9 +163,7 @@
     }
 
     @media (max-width: 700px) {
-      .post {
-        grid-template-columns: 1fr;
-      }
+      .post { grid-template-columns: 1fr; }
     }
 
     .user {
@@ -233,9 +213,7 @@
       font-size: 12px;
     }
 
-    .post-main {
-      padding: 12px 14px;
-    }
+    .post-main { padding: 12px 14px; }
 
     .post-time {
       color: var(--muted);
@@ -258,17 +236,22 @@
       font-size: 14px;
     }
 
-    a {
-      color: var(--link);
+    .quote {
+      color: #ddd;
+      border-left: 3px solid var(--yellow);
+      padding-left: 10px;
+      margin: 10px 0;
     }
+
+    a { color: var(--link); }
   </style>
 </head>
 
 <body>
   <header>
     <div class="top">
-      <h1>BRÖDBACKEN FORUM</h1>
-      <div class="subtitle">Lokalt diskussionsforum för Söderläge med omnejd</div>
+      <h1>BRÖDNYTT FORUM</h1>
+      <div class="subtitle">Diskussionsforum för brödälskare över hela landet</div>
     </div>
   </header>
 
@@ -278,47 +261,178 @@
         <div class="box-title">Aktuella trådar</div>
 
         <div class="forum-row" onclick="openThread('thread1')">
-          <div class="icon">🥖</div>
+          <div class="icon">🥐</div>
           <div>
-            <div class="thread-title">Vad hände egentligen på Brödernas Boulangerie?</div>
-            <div class="thread-desc">Avspärrat sedan i morse. Någon som vet mer?</div>
+            <div class="thread-title">Tips på bageri med färska bullar efter kl. 18?</div>
+            <div class="thread-desc">BridgeOchBullälskaren söker hjälp inför veckans bridgespel.</div>
+          </div>
+          <div class="stat">8 svar<br>1 942 visningar</div>
+          <div class="latest">Senaste: <b>2025-09-18</b><br>av Agneta75</div>
+        </div>
+
+        <div class="forum-row" onclick="openThread('thread2')">
+          <div class="icon">🚓</div>
+          <div>
+            <div class="thread-title">Vad hände på Brödernas Boulangerie?</div>
+            <div class="thread-desc">Avspärrat, stängt och poliser utanför. Någon som vet mer?</div>
           </div>
           <div class="stat">12 svar<br>1 284 visningar</div>
           <div class="latest">Senaste: <b>09:41</b><br>av MjölMange</div>
         </div>
 
-        <div class="forum-row" onclick="openThread('thread2')">
-          <div class="icon">🔍</div>
-          <div>
-            <div class="thread-title">Polisens ritning över lokalen</div>
-            <div class="thread-desc">Varför nämner alla små rum och fönster?</div>
-          </div>
-          <div class="stat">6 svar<br>842 visningar</div>
-          <div class="latest">Senaste: <b>10:03</b><br>av Degektiv</div>
-        </div>
-
         <div class="forum-row" onclick="openThread('thread3')">
-          <div class="icon">☀️</div>
+          <div class="icon">🍫</div>
           <div>
-            <div class="thread-title">Solen låg fel när kroppen hittades?</div>
-            <div class="thread-desc">Entrén ligger i söder, men skuggan kom från sidan.</div>
+            <div class="thread-title">Bästa tipsen för riktigt bra kladdkakssmet?</div>
+            <div class="thread-desc">Smeten är halva grejen. Dela era fulaste knep.</div>
           </div>
-          <div class="stat">4 svar<br>511 visningar</div>
-          <div class="latest">Senaste: <b>10:22</b><br>av SkorpSanna</div>
+          <div class="stat">24 svar<br>3 781 visningar</div>
+          <div class="latest">Senaste: <b>10:12</b><br>av SmetProffset</div>
         </div>
 
         <div class="forum-row" onclick="openThread('thread4')">
-          <div class="icon">🍞</div>
+          <div class="icon">🗺️</div>
           <div>
-            <div class="thread-title">Bästa bullen i Söderläge?</div>
-            <div class="thread-desc">Försöker tänka på något annat än mordet.</div>
+            <div class="thread-title">Tips på bullrunda i Uppsala?</div>
+            <div class="thread-desc">Vill gå en promenad och äta minst tre bullar på vägen.</div>
           </div>
-          <div class="stat">31 svar<br>2 093 visningar</div>
-          <div class="latest">Senaste: <b>10:44</b><br>av Agneta75</div>
+          <div class="stat">17 svar<br>2 409 visningar</div>
+          <div class="latest">Senaste: <b>I går</b><br>av KardemummaKarl</div>
+        </div>
+
+        <div class="forum-row" onclick="openThread('thread5')">
+          <div class="icon">🔥</div>
+          <div>
+            <div class="thread-title">Är 250 grader för varmt för pizzastål?</div>
+            <div class="thread-desc">Jag vill ha bubblig kant men inte brandlarm.</div>
+          </div>
+          <div class="stat">9 svar<br>891 visningar</div>
+          <div class="latest">Senaste: <b>I går</b><br>av UgnUffe</div>
+        </div>
+
+        <div class="forum-row" onclick="openThread('thread6')">
+          <div class="icon">🥖</div>
+          <div>
+            <div class="thread-title">Surdeg som luktar aceton, slänga eller mata?</div>
+            <div class="thread-desc">Min burk beter sig som om den har hamnat i studentkorridor.</div>
+          </div>
+          <div class="stat">14 svar<br>1 606 visningar</div>
+          <div class="latest">Senaste: <b>2026-08-03</b><br>av RågRoffe</div>
         </div>
       </section>
 
       <section id="thread1" class="thread-view">
+        <div class="back" onclick="goBack()">← Tillbaka till trådlistan</div>
+
+        <article class="post">
+          <div class="user">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=BridgeOchBullalskaren" alt="">
+            <div>
+              <div class="username">BridgeOchBullälskaren</div>
+              <div class="role">Medlem sedan 2018</div>
+            </div>
+          </div>
+          <div class="post-main">
+            <div class="post-time">Publicerat 2025-09-16 kl. 14:08</div>
+            <div class="post-text">
+              Hej alla brödvänner!<br><br>
+              Jag undrar om någon kan tipsa om ett riktigt bra bageri där man kan köpa färska bullar lite senare på dagen.
+              Jag spelar bridge varje tisdag, torsdag och fredag klockan 19.00 och brukar ta med fika till gruppen.
+              Det är mycket uppskattat, särskilt av Bengt som alltid tar två om det finns kardemumma.<br><br>
+              Jag vill helst handla så nära inpå som möjligt och åka direkt till lokalen, så bullarna fortfarande känns nybakade.
+              Bageriet behöver därför ha öppet till åtminstone 18.00. Gärna trevlig personal också, sådant märker man.
+            </div>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="user">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=Skorpa52" alt="">
+            <div>
+              <div class="username">Skorpa52</div>
+              <div class="role">Stammis</div>
+            </div>
+          </div>
+          <div class="post-main">
+            <div class="post-time">Publicerat 2025-09-16 kl. 14:37</div>
+            <div class="post-text">
+              Bröder Munks bageri har ganska bra kanelbullar och jag tror de har öppet sent vissa dagar.
+              Ligger smidigt om man ska vidare med buss också.
+            </div>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="user">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=FackligFralla" alt="">
+            <div>
+              <div class="username">FackligFralla</div>
+              <div class="role">Registrerad</div>
+            </div>
+          </div>
+          <div class="post-main">
+            <div class="post-time">Publicerat 2025-09-16 kl. 15:02</div>
+            <div class="post-text">
+              Jag hade nog valt något annat än Bröder Munks. Har hört från en bekant att personalen där inte behandlas särskilt bra.
+              Bullar smakar sämre när de bakats under dålig stämning, om du frågar mig.
+            </div>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="user">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=BulleBertil" alt="">
+            <div>
+              <div class="username">BulleBertil</div>
+              <div class="role">Veteran</div>
+            </div>
+          </div>
+          <div class="post-main">
+            <div class="post-time">Publicerat 2025-09-16 kl. 16:19</div>
+            <div class="post-text">
+              Brödernas Boulangerie! De har haft öppet till 18 när jag varit där, och deras kardemummabullar är toppklass.
+              Lite dyrare, men man får vad man betalar för.
+            </div>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="user">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=Kaffekopp" alt="">
+            <div>
+              <div class="username">Kaffekopp</div>
+              <div class="role">Medlem</div>
+            </div>
+          </div>
+          <div class="post-main">
+            <div class="post-time">Publicerat 2025-09-16 kl. 17:04</div>
+            <div class="post-text">
+              Instämmer om Brödernas. Litet ställe, men bra kvalitet. Tror entrén ligger mot Söderläge-sidan, om du kommer från bron.
+            </div>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="user">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=BridgeOchBullalskaren2" alt="">
+            <div>
+              <div class="username">BridgeOchBullälskaren</div>
+              <div class="role">Medlem sedan 2018</div>
+            </div>
+          </div>
+          <div class="post-main">
+            <div class="post-time">Publicerat 2025-09-18 kl. 09:22</div>
+            <div class="post-text">
+              Tack snälla för tipsen! Jag provade Brödernas Boulangerie i går fast det inte var bridgedag, bara för att kontrollera kvaliteten.
+              Mycket god bulle och artig personal. Det får nog bli mitt nya torsdagsstopp.
+            </div>
+          </div>
+        </article>
+
+        <div class="locked-note">Tråden är låst. Nya kommentarer kan inte publiceras.</div>
+      </section>
+
+      <section id="thread2" class="thread-view">
         <div class="back" onclick="goBack()">← Tillbaka till trådlistan</div>
 
         <article class="post">
@@ -374,76 +488,54 @@
         <div class="locked-note">Tråden är låst. Nya kommentarer kan inte publiceras.</div>
       </section>
 
-      <section id="thread2" class="thread-view">
-        <div class="back" onclick="goBack()">← Tillbaka till trådlistan</div>
-
-        <article class="post">
-          <div class="user">
-            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=RitningsRune" alt="">
-            <div>
-              <div class="username">RitningsRune</div>
-              <div class="role">Veteran</div>
-            </div>
-          </div>
-          <div class="post-main">
-            <div class="post-time">Publicerat i dag 09:02</div>
-            <div class="post-text">
-              Någon lade upp en skiss över lokalen tidigare. Den verkar visa att vissa rum saknar fönster helt.
-              Det borde spela roll om vittnet såg en skugga.
-            </div>
-          </div>
-        </article>
-
-        <article class="post">
-          <div class="user">
-            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=Degektiv" alt="">
-            <div>
-              <div class="username">Degektiv</div>
-              <div class="role">Brödspanare</div>
-            </div>
-          </div>
-          <div class="post-main">
-            <div class="post-time">Publicerat i dag 10:03</div>
-            <div class="post-text">
-              Kolla inte bara var rummen ligger. Kolla också vad som borde finnas i dem. Vatten, mjöl, värme och kyla lämnar spår.
-            </div>
-          </div>
-        </article>
-
-        <div class="locked-note">Tråden är låst. Nya kommentarer kan inte publiceras.</div>
-      </section>
-
       <section id="thread3" class="thread-view">
         <div class="back" onclick="goBack()">← Tillbaka till trådlistan</div>
 
         <article class="post">
           <div class="user">
-            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=SkorpSanna" alt="">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=KladdKajsa" alt="">
             <div>
-              <div class="username">SkorpSanna</div>
-              <div class="role">Medlem</div>
+              <div class="username">KladdKajsa</div>
+              <div class="role">Smetansvarig</div>
             </div>
           </div>
           <div class="post-main">
-            <div class="post-time">Publicerat i dag 10:22</div>
+            <div class="post-time">Publicerat i går 21:14</div>
             <div class="post-text">
-              Om entrén ligger mot söder och kroppen hittades på morgonen borde ljuset komma från öst. Det kan inte vara vilket rum som helst.
+              Jag vill ha era bästa tips för kladdkakssmet. Inte kakan alltså, smeten. Den ska vara blank, tjock och smaka som om man tappat allt omdöme.
             </div>
           </div>
         </article>
 
         <article class="post">
           <div class="user">
-            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=Solbulle" alt="">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=SmetProffset" alt="">
             <div>
-              <div class="username">Solbulle</div>
-              <div class="role">Registrerad</div>
+              <div class="username">SmetProffset</div>
+              <div class="role">Veteran</div>
             </div>
           </div>
           <div class="post-main">
-            <div class="post-time">Publicerat i dag 10:31</div>
+            <div class="post-time">Publicerat i dag 10:12</div>
             <div class="post-text">
-              Exakt. Morgonsol från öst. Kvällssol från väst. Så tiden på fyndet är inte bara stämning.
+              Bryn smöret lätt, låt det svalna lite och rör ner kakaon direkt i smöret. Då blir smaken djupare.
+              Vispa inte efter att mjölet gått i. Rör bara tills det ser farligt gott ut.
+            </div>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="user">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=DiskmaskinsDeg" alt="">
+            <div>
+              <div class="username">DiskmaskinsDeg</div>
+              <div class="role">Ny användare</div>
+            </div>
+          </div>
+          <div class="post-main">
+            <div class="post-time">Publicerat i dag 10:18</div>
+            <div class="post-text">
+              En nypa salt. Alltid. Och lite kaffe om man vill lura folk att man är vuxen.
             </div>
           </div>
         </article>
@@ -456,16 +548,125 @@
 
         <article class="post">
           <div class="user">
-            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=Agneta75" alt="">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=PromenadPrinsessan" alt="">
             <div>
-              <div class="username">Agneta75</div>
+              <div class="username">PromenadPrinsessan</div>
+              <div class="role">Medlem</div>
+            </div>
+          </div>
+          <div class="post-main">
+            <div class="post-time">Publicerat i går 12:03</div>
+            <div class="post-text">
+              Jag vill göra en bullrunda i Uppsala i helgen. Tanken är promenad, kaffe och minst tre stopp.
+              Bonus om man inte måste gå uppför hela Carolina efter tredje bullen.
+            </div>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="user">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=KardemummaKarl" alt="">
+            <div>
+              <div class="username">KardemummaKarl</div>
               <div class="role">Stammis</div>
             </div>
           </div>
           <div class="post-main">
-            <div class="post-time">Publicerat i dag 10:44</div>
+            <div class="post-time">Publicerat i går 13:47</div>
             <div class="post-text">
-              Var ska jag nu handla bullar till bridgen?
+              Starta vid stationen, ta ett stopp nära ån, gå vidare mot domkyrkan och avsluta någonstans där man kan sitta ner och ångra sig i lugn och ro.
+            </div>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="user">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=RuneMedRussin" alt="">
+            <div>
+              <div class="username">RuneMedRussin</div>
+              <div class="role">Registrerad</div>
+            </div>
+          </div>
+          <div class="post-main">
+            <div class="post-time">Publicerat i går 14:02</div>
+            <div class="post-text">
+              Ta inte tre kardemummabullar i rad. Man tror att man vill det, men kroppen håller inte med.
+            </div>
+          </div>
+        </article>
+
+        <div class="locked-note">Tråden är låst. Nya kommentarer kan inte publiceras.</div>
+      </section>
+
+      <section id="thread5" class="thread-view">
+        <div class="back" onclick="goBack()">← Tillbaka till trådlistan</div>
+
+        <article class="post">
+          <div class="user">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=UgnUffe" alt="">
+            <div>
+              <div class="username">UgnUffe</div>
+              <div class="role">Medlem</div>
+            </div>
+          </div>
+          <div class="post-main">
+            <div class="post-time">Publicerat i går 18:33</div>
+            <div class="post-text">
+              Är 250 grader för varmt för pizzastål? Vill få bra botten, men bor i lägenhet och brandvarnaren är mer känslig än min surdeg.
+            </div>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="user">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=PlåtPatrik" alt="">
+            <div>
+              <div class="username">PlåtPatrik</div>
+              <div class="role">Veteran</div>
+            </div>
+          </div>
+          <div class="post-main">
+            <div class="post-time">Publicerat i går 18:50</div>
+            <div class="post-text">
+              250 är lugnt om stålet tål det. Vädra innan, inte efter. Efter är bara panik.
+            </div>
+          </div>
+        </article>
+
+        <div class="locked-note">Tråden är låst. Nya kommentarer kan inte publiceras.</div>
+      </section>
+
+      <section id="thread6" class="thread-view">
+        <div class="back" onclick="goBack()">← Tillbaka till trådlistan</div>
+
+        <article class="post">
+          <div class="user">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=RagRoffe" alt="">
+            <div>
+              <div class="username">RågRoffe</div>
+              <div class="role">Surdegsägare</div>
+            </div>
+          </div>
+          <div class="post-main">
+            <div class="post-time">Publicerat 2026-08-03 kl. 20:11</div>
+            <div class="post-text">
+              Min surdeg luktar aceton och sorg. Är det bara att mata eller ska jag börja om?
+            </div>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="user">
+            <img class="avatar" src="https://api.dicebear.com/9.x/identicon/svg?seed=LevainLisa" alt="">
+            <div>
+              <div class="username">LevainLisa</div>
+              <div class="role">Veteran</div>
+            </div>
+          </div>
+          <div class="post-main">
+            <div class="post-time">Publicerat 2026-08-03 kl. 20:44</div>
+            <div class="post-text">
+              Mata. Den är hungrig, inte ond. Häll bort lite, mata 1:2:2 och ställ inte burken i direkt sol.
             </div>
           </div>
         </article>
@@ -478,12 +679,13 @@
       <section class="box">
         <div class="box-title">Foruminfo</div>
         <div class="side-content">
-          Brödbacken Forum är öppet för läsning. Nya inlägg är tillfälligt avstängda efter nattens händelser.
+          Brödnytt Forum är öppet för läsning. Nya inlägg är avstängda tills vidare på grund av ovanligt många degiga rykten.
           <br><br>
-          <span class="pill">Lokalt</span>
-          <span class="pill">Boulangerie</span>
+          <span class="pill">Bullar</span>
+          <span class="pill">Bröd</span>
+          <span class="pill">Bagerier</span>
+          <span class="pill">Uppsala</span>
           <span class="pill">Rykten</span>
-          <span class="pill">Låsta trådar</span>
         </div>
       </section>
 
@@ -492,9 +694,10 @@
       <section class="box">
         <div class="box-title">Senaste nytt</div>
         <div class="side-content">
-          10:44 Agneta75 svarade i “Bästa bullen i Söderläge?”<br>
-          10:31 Solbulle svarade i “Solen låg fel?”<br>
-          10:03 Degektiv svarade i “Polisens ritning”
+          10:18 DiskmaskinsDeg svarade i “Kladdkakssmet”<br>
+          10:12 SmetProffset svarade i “Kladdkakssmet”<br>
+          09:41 MjölMange svarade i “Brödernas Boulangerie”<br>
+          2025-09-18 BridgeOchBullälskaren återkopplade om bullar till bridge
         </div>
       </section>
     </aside>

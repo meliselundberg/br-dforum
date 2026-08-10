@@ -192,10 +192,10 @@
     .avatar {
       width: 72px;
       height: 72px;
-      border-radius: 8px;
+      border-radius: 4px;
       object-fit: cover;
-      background: #444;
-      border: 2px solid #555;
+      background: #000;
+      border: 1px solid #dcdcdc;
       margin-bottom: 8px;
     }
 
@@ -704,7 +704,7 @@
 
         <article class="post">
           <div class="user">
-            <img class="avatar" data-pattern="110000000000" alt="">
+            <img class="avatar" data-pattern="110000" data-color="#22c55e" alt="">
             <div>
               <div class="username">broderanneli</div>
               <div class="role">Medlem</div>
@@ -737,7 +737,7 @@
 
         <article class="post">
           <div class="user">
-            <img class="avatar" data-pattern="100000000000" alt="">
+            <img class="avatar" data-pattern="100000" data-color="#22c55e" alt="">
             <div>
               <div class="username">broderanneli</div>
               <div class="role">Medlem</div>
@@ -770,7 +770,7 @@
 
         <article class="post">
           <div class="user">
-            <img class="avatar" data-pattern="111100000000" alt="">
+            <img class="avatar" data-pattern="111100" data-color="#22c55e" alt="">
             <div>
               <div class="username">broderanneli</div>
               <div class="role">Medlem</div>
@@ -975,74 +975,92 @@
       }).join("<br>");
     }
 
-    function makeGridAvatar(pattern) {
-      const cellW = 18;
-      const cellH = 8;
-      const gapX = 4;
-      const gapY = 3;
-      const startX = 14;
-      const startY = 8;
+    function hashString(str) {
+      let hash = 0;
 
-      let cells = "";
+      for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        hash |= 0;
+      }
 
-      for (let i = 0; i < 12; i++) {
-        const col = i % 2;
-        const row = Math.floor(i / 2);
+      return Math.abs(hash);
+    }
 
-        const x = startX + col * (cellW + gapX);
-        const y = startY + row * (cellH + gapY);
-        const isFilled = pattern[i] === "1";
+    function colorFromSeed(seed) {
+      const palette = [
+        "#22c55e",
+        "#c026d3",
+        "#ec4899",
+        "#8b5cf6",
+        "#3b82f6",
+        "#06b6d4",
+        "#eab308",
+        "#f97316",
+        "#ef4444"
+      ];
 
-        cells += `
+      return palette[hashString(seed) % palette.length];
+    }
+
+    function patternFromSeed(seed) {
+      const hash = hashString(seed);
+      let pattern = "";
+
+      for (let i = 0; i < 6; i++) {
+        pattern += ((hash >> i) & 1) ? "1" : "0";
+      }
+
+      if (pattern === "000000") pattern = "100000";
+      if (pattern === "111111") pattern = "111100";
+
+      return pattern;
+    }
+
+    function makeGridAvatar(pattern, color) {
+      const positions = [
+        { x: 0,  y: 0  },
+        { x: 50, y: 0  },
+        { x: 0,  y: 34 },
+        { x: 50, y: 34 },
+        { x: 0,  y: 68 },
+        { x: 50, y: 68 }
+      ];
+
+      let rects = `<rect width="100" height="100" fill="#000000"/>`;
+
+      for (let i = 0; i < 6; i++) {
+        const fill = pattern[i] === "1" ? color : "#000000";
+
+        rects += `
           <rect
-            x="${x}"
-            y="${y}"
-            width="${cellW}"
-            height="${cellH}"
-            rx="2"
-            fill="${isFilled ? "#1f1f1f" : "#858585"}"
+            x="${positions[i].x}"
+            y="${positions[i].y}"
+            width="49"
+            height="32"
+            fill="${fill}"
           />
         `;
       }
 
       const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72">
-          <rect x="2" y="2" width="68" height="68" rx="10" fill="#5b5b5b" stroke="#717171" stroke-width="2"/>
-          <rect x="9" y="9" width="54" height="54" rx="6" fill="#666666"/>
-          ${cells}
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+          ${rects}
         </svg>
       `;
 
       return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
     }
 
-    function patternFromSeed(seed) {
-      let hash = 0;
-
-      for (let i = 0; i < seed.length; i++) {
-        hash = ((hash << 5) - hash) + seed.charCodeAt(i);
-        hash = hash & hash;
-      }
-
-      let pattern = "";
-
-      for (let i = 0; i < 12; i++) {
-        const bit = Math.abs(hash + i * 37) % 3 === 0 ? "1" : "0";
-        pattern += bit;
-      }
-
-      return pattern;
-    }
-
     function initAvatars() {
       document.querySelectorAll("img.avatar").forEach(function(img) {
-        const fixedPattern = img.dataset.pattern;
+        const pattern = img.dataset.pattern;
         const seed = img.dataset.seed;
+        const color = img.dataset.color || colorFromSeed(seed || "default");
 
-        if (fixedPattern) {
-          img.src = makeGridAvatar(fixedPattern);
+        if (pattern) {
+          img.src = makeGridAvatar(pattern, color);
         } else if (seed) {
-          img.src = makeGridAvatar(patternFromSeed(seed));
+          img.src = makeGridAvatar(patternFromSeed(seed), color);
         }
       });
     }

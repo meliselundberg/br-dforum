@@ -265,7 +265,7 @@ const threads = [
         avatarSeed: "broderanneli1",
         time: "Publicerat 3/5 kl. 11:04",
         text: `
-          Jag brukar inte be om tårtrådshjälp, men nu behöver jag det.
+          Jag brukar inte be om tårthjälp, men nu behöver jag det.
           Min pappa är ganska traditionell och tycker bäst om grädde, bär och sådant som inte känns för modernt.
         `
       },
@@ -285,7 +285,7 @@ const threads = [
         avatarSeed: "broderanneli2",
         time: "Publicerat 1/8 kl. 09:18",
         text: `
-          Tack för tips! Jag ska fixa tårtan i dag eftersom pappa har namnsdag den 1 augusti.
+          Tack för tips! Jag ska fixa tårtan i dag eftersom pappa har namnsdag.
           Han säger alltid att han inte vill bli firad, men äter ändå två bitar om det finns hallon.
         `
       },

@@ -1,3 +1,5 @@
+let currentProfileTab = "overview";
+
 function getSortedThreads() {
   return [...threads].sort(function(a, b) {
     return new Date(b.latestDate) - new Date(a.latestDate);
@@ -45,7 +47,7 @@ function renderLatestNews() {
   latestNews.innerHTML = sortedThreads.map(function(thread) {
     const latestPost = thread.posts[thread.posts.length - 1];
     return `${thread.latestLabel} ${latestPost.user} svarade i “${thread.title}”`;
-  }).join("<br>");
+  }).join("<br><br>");
 }
 
 function openThread(id) {
@@ -54,6 +56,10 @@ function openThread(id) {
   });
 
   const threadView = document.getElementById("threadView");
+  const profileView = document.getElementById("profileView");
+
+  profileView.style.display = "none";
+  profileView.innerHTML = "";
 
   threadView.innerHTML = `
     <div class="back" onclick="goBack()">← Tillbaka till trådlistan</div>
@@ -97,9 +103,15 @@ function openThread(id) {
 function goBack() {
   document.getElementById("threadView").style.display = "none";
   document.getElementById("threadView").innerHTML = "";
+
+  document.getElementById("profileView").style.display = "none";
+  document.getElementById("profileView").innerHTML = "";
+
   document.getElementById("front").style.display = "block";
   window.scrollTo(0, 0);
 }
+
+/* AVATARER */
 
 function hashString(str) {
   let hash = 0;
@@ -178,7 +190,7 @@ function makeGridAvatar(pattern, color) {
 }
 
 function initAvatars() {
-  document.querySelectorAll("img.avatar").forEach(function(img) {
+  document.querySelectorAll("img.avatar, img.profile-avatar").forEach(function(img) {
     const pattern = img.dataset.pattern;
     const seed = img.dataset.seed;
     const color = img.dataset.color || colorFromSeed(seed || "default");
@@ -189,6 +201,94 @@ function initAvatars() {
       img.src = makeGridAvatar(patternFromSeed(seed), color);
     }
   });
+}
+
+/* POPUPS */
+
+function showCroissantPopup(event) {
+  event.stopPropagation();
+  document.getElementById("croissantPopup").style.display = "block";
+}
+
+function closeCroissantPopup() {
+  document.getElementById("croissantPopup").style.display = "none";
+}
+
+/* LOGIN */
+
+function openLogin() {
+  document.getElementById("loginPopup").style.display = "block";
+  document.getElementById("loginError").textContent = "";
+  document.getElementById("loginUsername").value = "";
+  document.getElementById("loginPassword").value = "";
+
+  document.querySelectorAll(".code-digit").forEach(function(input) {
+    input.value = "";
+  });
+
+  document.getElementById("loginUsername").focus();
+}
+
+function closeLogin() {
+  document.getElementById("loginPopup").style.display = "none";
+}
+
+async function tryLogin() {
+  const username = document.getElementById("loginUsername").value.trim().toLowerCase();
+  const password = document.getElementById("loginPassword").value.trim().toLowerCase();
+
+  const code = Array.from(document.querySelectorAll(".code-digit"))
+    .map(function(input) {
+      return input.value.trim();
+    })
+    .join("");
+
+  const loginString = username + "|" + password + "|" + code;
+
+  const encryptedMessage = "zqE8SXy+ZncWoJZLmWx/4/YflIolMvmsT9ulbeHchk1t0+gP0H6Q2dVKLGBP2k9Px4wzukMo1dFH+o7E";
+  const ivString = "7LgjcKysBNV3MSTp";
+
+  try {
+    const decodedMessage = await decryptMessage(loginString, encryptedMessage, ivString);
+
+    document.getElementById("loginPopup").style.display = "none";
+    renderProfilePage(decodedMessage);
+  } catch (error) {
+    document.getElementById("loginError").textContent = "Fel inloggning. Kontrollera användarnamn, lösenord och säkerhetskod.";
+  }
+}
+
+async function decryptMessage(loginString, encryptedMessage, ivString) {
+  const encoder = new TextEncoder();
+
+  const keyMaterial = await crypto.subtle.digest(
+    "SHA-256",
+    encoder.encode(loginString)
+  );
+
+  const key = await crypto.subtle.importKey(
+    "raw",
+    keyMaterial,
+    { name: "AES-GCM" },
+    false,
+    ["decrypt"]
+  );
+
+  const encryptedBytes = Uint8Array.from(atob(encryptedMessage), function(c) {
+    return c.charCodeAt(0);
+  });
+
+  const iv = Uint8Array.from(atob(ivString), function(c) {
+    return c.charCodeAt(0);
+  });
+
+  const decryptedBytes = await crypto.subtle.decrypt(
+    { name: "AES-GCM", iv: iv },
+    key,
+    encryptedBytes
+  );
+
+  return new TextDecoder().decode(decryptedBytes);
 }
 
 function initCodeInputs() {
@@ -236,93 +336,154 @@ function initCodeInputs() {
   });
 }
 
-function showCroissantPopup(event) {
-  event.stopPropagation();
-  document.getElementById("croissantPopup").style.display = "block";
+/* PROFILSIDA EFTER LOGIN */
+
+function renderProfilePage(orderText) {
+  const profileView = document.getElementById("profileView");
+
+  document.getElementById("front").style.display = "none";
+  document.getElementById("threadView").style.display = "none";
+  document.getElementById("threadView").innerHTML = "";
+
+  profileView.style.display = "block";
+
+  profileView.innerHTML = `
+    <div class="back" onclick="goBack()">← Tillbaka till forumet</div>
+
+    <section class="profile-card">
+      <div class="profile-hero">
+        <div class="profile-hero-inner">
+          <img
+            class="profile-avatar"
+            data-pattern="111100"
+            data-seed="broderanneli3"
+            alt=""
+          >
+
+          <div>
+            <h2 class="profile-name">broderanneli</h2>
+            <div class="profile-meta">Medlem sedan 2024 · Bullbeställare · Gillar croissanter</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-tabs">
+        <button class="profile-tab active" onclick="switchProfileTab('overview')">Översikt</button>
+        <button class="profile-tab" onclick="switchProfileTab('orders')">Beställningar</button>
+        <button class="profile-tab" onclick="switchProfileTab('activity')">Aktivitet</button>
+        <button class="profile-tab" onclick="switchProfileTab('settings')">Inställningar</button>
+      </div>
+
+      <div class="profile-body">
+        <div id="tab-overview" class="tab-panel active">
+          <div class="info-grid">
+            <div class="info-box">
+              <div class="info-label">Användarnamn</div>
+              <div class="info-value">broderanneli</div>
+            </div>
+
+            <div class="info-box">
+              <div class="info-label">Favorit</div>
+              <div class="info-value">Croissant</div>
+            </div>
+
+            <div class="info-box">
+              <div class="info-label">Senaste inlägg</div>
+              <div class="info-value">Tips på tårta till pappa</div>
+            </div>
+
+            <div class="info-box">
+              <div class="info-label">Status</div>
+              <div class="info-value">Inloggad</div>
+            </div>
+          </div>
+
+          <div class="profile-note">
+            Välkommen tillbaka. Kontrollera gärna dina beställningar innan du loggar ut.
+          </div>
+        </div>
+
+        <div id="tab-orders" class="tab-panel">
+          <div class="order-card">
+            <div class="order-title">Dina beställningar</div>
+            <div class="order-text">${orderText}</div>
+          </div>
+        </div>
+
+        <div id="tab-activity" class="tab-panel">
+          <ul class="fake-list">
+            <li>Skrev i tråden “Tips på tårta till pappa på namnsdagen?”</li>
+            <li>Markerade en croissant som favorit</li>
+            <li>Kommenterade en tidigare bullbeställning</li>
+            <li>Loggade in från en okänd degig enhet</li>
+          </ul>
+        </div>
+
+        <div id="tab-settings" class="tab-panel">
+          <div class="info-grid">
+            <div class="info-box">
+              <div class="info-label">E-postnotiser</div>
+              <div class="info-value">Avstängda</div>
+            </div>
+
+            <div class="info-box">
+              <div class="info-label">Beställningspåminnelser</div>
+              <div class="info-value">På</div>
+            </div>
+
+            <div class="info-box">
+              <div class="info-label">Profilbild</div>
+              <div class="info-value">Rutnätsavatar</div>
+            </div>
+
+            <div class="info-box">
+              <div class="info-label">Kontosäkerhet</div>
+              <div class="info-value">4-siffrig kod</div>
+            </div>
+          </div>
+
+          <div class="profile-note">
+            Inställningar kan inte ändras just nu eftersom forumet är låst.
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+
+  initAvatars();
+  window.scrollTo(0, 0);
 }
 
-function closeCroissantPopup() {
-  document.getElementById("croissantPopup").style.display = "none";
-}
+function switchProfileTab(tabName) {
+  currentProfileTab = tabName;
 
-function openLogin() {
-  document.getElementById("loginPopup").style.display = "block";
-  document.getElementById("loginError").textContent = "";
-  document.getElementById("loginUsername").value = "";
-  document.getElementById("loginPassword").value = "";
-
-  document.querySelectorAll(".code-digit").forEach(function(input) {
-    input.value = "";
+  document.querySelectorAll(".profile-tab").forEach(function(tab) {
+    tab.classList.remove("active");
   });
 
-  document.getElementById("loginUsername").focus();
-}
-
-function closeLogin() {
-  document.getElementById("loginPopup").style.display = "none";
-}
-
-async function tryLogin() {
-  const username = document.getElementById("loginUsername").value.trim().toLowerCase();
-  const password = document.getElementById("loginPassword").value.trim().toLowerCase();
-  const code = Array.from(document.querySelectorAll(".code-digit"))
-    .map(function(input) {
-      return input.value.trim();
-    })
-    .join("");
-
-  const loginString = username + "|" + password + "|" + code;
-
-  const encryptedMessage = "zqE8SXy+ZncWoJZLmWx/4/YflIolMvmsT9ulbeHchk1t0+gP0H6Q2dVKLGBP2k9Px4wzukMo1dFH+o7E";
-  const ivString = "7LgjcKysBNV3MSTp";
-
-  try {
-    const decodedMessage = await decryptMessage(loginString, encryptedMessage, ivString);
-
-    document.getElementById("loginPopup").style.display = "none";
-    document.getElementById("successText").innerText = decodedMessage;
-    document.getElementById("successPopup").style.display = "block";
-  } catch (error) {
-    document.getElementById("loginError").textContent = "Fel inloggning. Kontrollera användarnamn, lösenord och säkerhetskod.";
-  }
-}
-
-async function decryptMessage(loginString, encryptedMessage, ivString) {
-  const encoder = new TextEncoder();
-
-  const keyMaterial = await crypto.subtle.digest(
-    "SHA-256",
-    encoder.encode(loginString)
-  );
-
-  const key = await crypto.subtle.importKey(
-    "raw",
-    keyMaterial,
-    { name: "AES-GCM" },
-    false,
-    ["decrypt"]
-  );
-
-  const encryptedBytes = Uint8Array.from(atob(encryptedMessage), function(c) {
-    return c.charCodeAt(0);
+  document.querySelectorAll(".tab-panel").forEach(function(panel) {
+    panel.classList.remove("active");
   });
 
-  const iv = Uint8Array.from(atob(ivString), function(c) {
-    return c.charCodeAt(0);
+  const tabButtons = Array.from(document.querySelectorAll(".profile-tab"));
+
+  tabButtons.forEach(function(button) {
+    const buttonText = button.textContent.trim().toLowerCase();
+
+    if (
+      (tabName === "overview" && buttonText === "översikt") ||
+      (tabName === "orders" && buttonText === "beställningar") ||
+      (tabName === "activity" && buttonText === "aktivitet") ||
+      (tabName === "settings" && buttonText === "inställningar")
+    ) {
+      button.classList.add("active");
+    }
   });
 
-  const decryptedBytes = await crypto.subtle.decrypt(
-    { name: "AES-GCM", iv: iv },
-    key,
-    encryptedBytes
-  );
-
-  return new TextDecoder().decode(decryptedBytes);
+  document.getElementById("tab-" + tabName).classList.add("active");
 }
 
-function closeSuccess() {
-  document.getElementById("successPopup").style.display = "none";
-}
+/* START */
 
 renderThreadList();
 renderLatestNews();

@@ -782,3 +782,8 @@ aside .box {
     flex-direction: column;
   }
 }
+
+.single-page {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 920px;
+}

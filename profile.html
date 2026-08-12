@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>broderanneli | Brödnytt Forum</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <header>
+    <div class="top">
+      <h1>BRÖDNYTT FORUM</h1>
+      <div class="subtitle">Inloggad som broderanneli</div>
+    </div>
+  </header>
+
+  <div class="wrap single-page">
+    <main>
+      <div class="back" onclick="window.location.href='index.html'">← Tillbaka till forumet</div>
+
+      <section class="profile-card">
+        <div class="profile-hero">
+          <div class="profile-hero-inner">
+            <img id="profileAvatar" class="profile-avatar" alt="">
+
+            <div>
+              <h2 class="profile-name">broderanneli</h2>
+              <div class="profile-meta">Medlem · Bullbeställare · Mega Slay</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-tabs">
+          <button class="profile-tab active" onclick="switchProfileTab('overview')">Översikt</button>
+          <button class="profile-tab" onclick="switchProfileTab('orders')">Beställningar</button>
+          <button class="profile-tab" onclick="switchProfileTab('activity')">Aktivitet</button>
+          <button class="profile-tab" onclick="switchProfileTab('settings')">Inställningar</button>
+        </div>
+
+        <div class="profile-body">
+          <div id="tab-overview" class="tab-panel active">
+            <div class="info-grid">
+              <div class="info-box">
+                <div class="info-label">Användarnamn</div>
+                <div class="info-value">broderanneli</div>
+              </div>
+
+              <div class="info-box">
+                <div class="info-label">Senaste inlägg</div>
+                <div class="info-value">Tips på tårta till pappa på namnsdagen?</div>
+              </div>
+
+              <div class="info-box">
+                <div class="info-label">Status</div>
+                <div class="info-value">Inloggad</div>
+              </div>
+            </div>
+
+            <div class="profile-note">
+              Välkommen tillbaka broderanneli
+            </div>
+          </div>
+
+          <div id="tab-orders" class="tab-panel">
+            <div class="order-card">
+              <div class="order-title">Dina beställningar</div>
+              <div id="orderText" class="order-text"></div>
+            </div>
+          </div>
+
+          <div id="tab-activity" class="tab-panel">
+            <ul class="fake-list">
+              <li>Skrev i tråden “Tips på tårta till pappa på namnsdagen?”</li>
+              <li>Kommenterade en tidigare bullbeställning</li>
+            </ul>
+          </div>
+
+          <div id="tab-settings" class="tab-panel">
+            <div class="info-grid">
+              <div class="info-box">
+                <div class="info-label">E-postnotiser</div>
+                <div class="info-value">Avstängda</div>
+              </div>
+
+              <div class="info-box">
+                <div class="info-label">Beställningspåminnelser</div>
+                <div class="info-value">På</div>
+              </div>
+
+              <div class="info-box">
+                <div class="info-label">Profilbild</div>
+                <div class="info-value">Rutnätsavatar</div>
+              </div>
+
+              <div class="info-box">
+                <div class="info-label">Kontosäkerhet</div>
+                <div class="info-value">4-siffrig kod</div>
+              </div>
+            </div>
+
+            <div class="profile-note">
+              Inställningar kan inte ändras just nu eftersom forumet är låst.
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="profile.js"></script>
+</body>
+</html>

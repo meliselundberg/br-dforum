@@ -249,14 +249,14 @@ async function tryLogin() {
   const ivString = "7LgjcKysBNV3MSTp";
 
   try {
-    const decodedMessage = await decryptMessage(loginString, encryptedMessage, ivString);
-
-    document.getElementById("loginPopup").style.display = "none";
-    renderProfilePage(decodedMessage);
-  } catch (error) {
-    document.getElementById("loginError").textContent = "Fel inloggning. Kontrollera användarnamn, lösenord och säkerhetskod.";
+      const decodedMessage = await decryptMessage(loginString, encryptedMessage, ivString);
+    
+      sessionStorage.setItem("brodnyttOrderText", decodedMessage);
+      window.location.href = "profile.html";
+    } catch (error) {
+      document.getElementById("loginError").textContent = "Fel inloggning. Kontrollera användarnamn, lösenord och säkerhetskod.";
+    }
   }
-}
 
 async function decryptMessage(loginString, encryptedMessage, ivString) {
   const encoder = new TextEncoder();

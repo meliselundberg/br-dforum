@@ -16,51 +16,6 @@ function renderThreadList() {
       ? `<div class="icon secret-icon" onclick="showCroissantPopup(event)">${thread.icon}</div>`
       : `<div class="icon">${thread.icon}</div>`;
 
-    function initCodeInputs() {
-      const inputs = Array.from(document.querySelectorAll(".code-digit"));
-    
-      inputs.forEach(function(input, index) {
-        input.addEventListener("input", function() {
-          input.value = input.value.replace(/\D/g, "").slice(0, 1);
-    
-          if (input.value && inputs[index + 1]) {
-            inputs[index + 1].focus();
-          }
-        });
-    
-        input.addEventListener("keydown", function(event) {
-          if (event.key === "Backspace" && !input.value && inputs[index - 1]) {
-            inputs[index - 1].focus();
-          }
-        });
-    
-        input.addEventListener("paste", function(event) {
-          event.preventDefault();
-    
-          const pasted = event.clipboardData
-            .getData("text")
-            .replace(/\D/g, "")
-            .slice(0, 4);
-    
-          pasted.split("").forEach(function(char, pasteIndex) {
-            if (inputs[pasteIndex]) {
-              inputs[pasteIndex].value = char;
-            }
-          });
-    
-          const nextEmpty = inputs.find(function(item) {
-            return !item.value;
-          });
-    
-          if (nextEmpty) {
-            nextEmpty.focus();
-          } else {
-            inputs[inputs.length - 1].focus();
-          }
-        });
-      });
-    }
-
     return `
       <div class="forum-row" onclick="openThread('${thread.id}')">
         ${iconHtml}
@@ -233,6 +188,51 @@ function initAvatars() {
     } else if (seed) {
       img.src = makeGridAvatar(patternFromSeed(seed), color);
     }
+  });
+}
+
+function initCodeInputs() {
+  const inputs = Array.from(document.querySelectorAll(".code-digit"));
+
+  inputs.forEach(function(input, index) {
+    input.addEventListener("input", function() {
+      input.value = input.value.replace(/\D/g, "").slice(0, 1);
+
+      if (input.value && inputs[index + 1]) {
+        inputs[index + 1].focus();
+      }
+    });
+
+    input.addEventListener("keydown", function(event) {
+      if (event.key === "Backspace" && !input.value && inputs[index - 1]) {
+        inputs[index - 1].focus();
+      }
+    });
+
+    input.addEventListener("paste", function(event) {
+      event.preventDefault();
+
+      const pasted = event.clipboardData
+        .getData("text")
+        .replace(/\D/g, "")
+        .slice(0, 4);
+
+      pasted.split("").forEach(function(char, pasteIndex) {
+        if (inputs[pasteIndex]) {
+          inputs[pasteIndex].value = char;
+        }
+      });
+
+      const nextEmpty = inputs.find(function(item) {
+        return !item.value;
+      });
+
+      if (nextEmpty) {
+        nextEmpty.focus();
+      } else {
+        inputs[inputs.length - 1].focus();
+      }
+    });
   });
 }
 

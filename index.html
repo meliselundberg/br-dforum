@@ -72,7 +72,13 @@
         <input id="loginPassword" type="password" autocomplete="off">
 
         <label>Säkerhetskod</label>
-        <input id="loginCode" type="text" inputmode="numeric" autocomplete="off">
+
+        <div class="code-boxes">
+          <input class="code-digit" type="text" inputmode="numeric" maxlength="1" autocomplete="off">
+          <input class="code-digit" type="text" inputmode="numeric" maxlength="1" autocomplete="off">
+          <input class="code-digit" type="text" inputmode="numeric" maxlength="1" autocomplete="off">
+          <input class="code-digit" type="text" inputmode="numeric" maxlength="1" autocomplete="off">
+        </div>
 
         <button onclick="tryLogin()">Logga in</button>
         <button onclick="closeLogin()">Stäng</button>

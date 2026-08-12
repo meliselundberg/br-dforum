@@ -599,6 +599,36 @@ aside br {
   transform: translateY(-1px);
 }
 
+.code-boxes {
+  display: grid;
+  grid-template-columns: repeat(4, 48px);
+  gap: 10px;
+  margin: 0 0 15px;
+}
+
+.code-digit {
+  width: 48px !important;
+  height: 54px;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: center;
+  font-size: 24px !important;
+  font-weight: 800;
+  border-radius: 14px;
+}
+
+@media (max-width: 520px) {
+  .code-boxes {
+    grid-template-columns: repeat(4, 44px);
+    gap: 8px;
+  }
+
+  .code-digit {
+    width: 44px !important;
+    height: 50px;
+  }
+}
+
 .order-box {
   padding: 18px;
   white-space: pre-line;

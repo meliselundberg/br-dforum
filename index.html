@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Brödnytt Forum</title>
-
   <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -24,6 +23,8 @@
       </section>
 
       <section id="threadView" class="thread-view"></section>
+
+      <section id="profileView" class="profile-view"></section>
     </main>
 
     <aside>
@@ -31,13 +32,14 @@
         <div class="box-title">Foruminfo</div>
         <div class="side-content">
           Brödnytt Forum är öppet för läsning. Nya inlägg är avstängda tills vidare på grund av ovanligt många degiga rykten.
-          <br><br>
 
-          <span class="pill">Bullar</span>
-          <span class="pill">Bröd</span>
-          <span class="pill">Bagerier</span>
-          <span class="pill">Uppsala</span>
-          <span class="pill">Rykten</span>
+          <div class="tag-area">
+            <span class="pill">Bullar</span>
+            <span class="pill">Bröd</span>
+            <span class="pill">Bagerier</span>
+            <span class="pill">Uppsala</span>
+            <span class="pill">Rykten</span>
+          </div>
 
           <button class="login-button" onclick="openLogin()">Logga in</button>
         </div>
@@ -47,6 +49,16 @@
         <div class="box-title">Senaste nytt</div>
         <div id="latestNews" class="side-content"></div>
       </section>
+
+      <section class="box">
+        <div class="box-title">Driftstatus</div>
+        <div class="side-content status-list">
+          <div><b>Forum:</b> öppet</div>
+          <div><b>Inlägg:</b> låsta</div>
+          <div><b>Beställningar:</b> kräver rätt konto</div>
+          <div><b>Croissantreaktioner:</b> aktiva</div>
+        </div>
+      </section>
     </aside>
   </div>
 
@@ -55,7 +67,7 @@
       <div class="popup-title">Favorit markerad</div>
       <div class="popup-content">
         <p>broderanneli gillar detta allra mest.</p>
-        <p><b>_ _ _ 9</b></p>
+        <p class="big-code"><b>_ _ _ 9</b></p>
         <button onclick="closeCroissantPopup()">Stäng</button>
       </div>
     </div>
@@ -64,6 +76,7 @@
   <div id="loginPopup" class="popup-backdrop">
     <div class="popup">
       <div class="popup-title">Logga in på Brödnytt Forum</div>
+
       <div class="popup-content">
         <label>Användarnamn</label>
         <input id="loginUsername" type="text" autocomplete="off">
@@ -72,7 +85,6 @@
         <input id="loginPassword" type="password" autocomplete="off">
 
         <label>Säkerhetskod</label>
-
         <div class="code-boxes">
           <input class="code-digit" type="text" inputmode="numeric" maxlength="1" autocomplete="off">
           <input class="code-digit" type="text" inputmode="numeric" maxlength="1" autocomplete="off">
@@ -84,16 +96,6 @@
         <button onclick="closeLogin()">Stäng</button>
 
         <div id="loginError" class="error"></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="successPopup" class="popup-backdrop">
-    <div class="popup">
-      <div class="popup-title">Inloggning lyckades</div>
-      <div class="popup-content">
-        <div id="successText" class="order-box"></div>
-        <button onclick="closeSuccess()">Stäng</button>
       </div>
     </div>
   </div>

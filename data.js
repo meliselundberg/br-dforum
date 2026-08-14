@@ -18,7 +18,7 @@ const threads = [
           Jag spelar bridge varje tisdag, torsdag och fredag klockan 19.00 och brukar ta med fika till gruppen.
           Det är mycket uppskattat, särskilt av Lars-Erik som alltid tar två om det finns kardemumma.<br><br>
           Jag vill helst handla så nära inpå som möjligt och åka direkt till lokalen, så bullarna fortfarande känns nybakade.
-          Bageriet behöver därför ha öppet till åtminstone 18.00. Gärna trevlig personal också, sådant märker man.
+          Bageriet behöver därför ha öppet till 18.00 så att jag kan åka senast 18.15. Gärna trevlig personal också, sådant märker man.
         `
       },
       {
@@ -77,8 +77,8 @@ const threads = [
     id: "thread2",
     icon: "🚓",
     title: "Vad hände på Brödernas Boulangerie?",
-    latestDate: "2026-08-10T09:41:00",
-    latestLabel: "09:41",
+    latestDate: "2026-09-25T09:41:00",
+    latestLabel: "2026-09-25",
     views: 1284,
     posts: [
       {
@@ -97,8 +97,7 @@ const threads = [
         avatarSeed: "KanelKungen",
         time: "Publicerat i dag 08:13",
         text: `
-          Jag hörde en smäll i går kväll. Inte från serveringen, tror jag. Mer från vänstra delen av lokalen.
-          Det lät som ett mindre rum, inte som köket.
+          Jag hörde en smäll i går kväll. Inte från serveringen, tror jag.
         `
       },
       {
@@ -177,7 +176,7 @@ const threads = [
         avatarSeed: "KardemummaKarl",
         time: "Publicerat i går 13:47",
         text: `
-          Starta vid stationen, ta ett stopp nära ån, gå vidare mot domkyrkan och avsluta någonstans där man kan sitta ner och ångra sig i lugn och ro.
+          Starta vid stationen, ta ett stopp nära ån, gå vidare mot domkyrkan och avsluta någonstans där man kan sitta ner i lugn och ro.
         `
       },
       {

@@ -258,7 +258,7 @@ const threads = [
     views: 632,
     posts: [
       {
-        user: "broderyeastmode",
+        user: "bröderyeastmode",
         role: "Medlem",
         avatarPattern: "110000",
         avatarSeed: "broderanneli1",
@@ -278,7 +278,7 @@ const threads = [
         `
       },
       {
-        user: "broderyeastmode",
+        user: "bröderyeastmode",
         role: "Medlem",
         avatarPattern: "100000",
         avatarSeed: "broderanneli2",
@@ -298,7 +298,7 @@ const threads = [
         `
       },
       {
-        user: "broderyeastmode",
+        user: "bröderyeastmode",
         role: "Medlem",
         avatarPattern: "111100",
         avatarSeed: "broderanneli3",

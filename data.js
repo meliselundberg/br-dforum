@@ -253,7 +253,7 @@ const threads = [
     id: "thread7",
     icon: "🎂",
     title: "Tips på tårta till pappa på namnsdagen?",
-    latestDate: "2025-08-07T16:12:00",
+    latestDate: "2026-08-07T16:12:00",
     latestLabel: "7/8",
     views: 632,
     posts: [
@@ -265,7 +265,7 @@ const threads = [
         time: "Publicerat 3/5 kl. 11:04",
         text: `
           Jag brukar inte be om tårthjälp, men nu behöver jag det.
-          Min pappa är ganska traditionell och tycker bäst om grädde, bär och sådant som inte känns för modernt.
+          Min pappa är ganska traditionell och tycker bäst om grädde, bär och sånt som inte känns för modernt.
         `
       },
       {
@@ -285,7 +285,7 @@ const threads = [
         time: "Publicerat 1/8 kl. 09:18",
         text: `
           Tack för tips! Jag ska fixa tårta eftersom pappa har namnsdag idag.
-          Han säger alltid att han inte vill bli firad, men äter ändå två bitar om det finns hallon.
+          Han säger alltid att han inte vill bli firad, men jag är säker på att han kommer bli glad! Funderar på något med hallon? Han älskar det.
         `
       },
       {

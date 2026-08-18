@@ -245,8 +245,8 @@ async function tryLogin() {
 
   const loginString = username + "|" + password + "|" + code;
 
-  const encryptedMessage = "zqE8SXy+ZncWoJZLmWx/4/YflIolMvmsT9ulbeHchk1t0+gP0H6Q2dVKLGBP2k9Px4wzukMo1dFH+o7E";
-  const ivString = "7LgjcKysBNV3MSTp";
+  const encryptedMessage = "V4NASR3dH8MelmQkHnuDi5Lc66LKEqdRaaqg28WBJ8XHcyt0dBt2q3q0s9bbQyfH5VT4zts2tBCtOKAS";
+  const ivString = "PpYX98LYVMhuzJdD";
 
   try {
       const decodedMessage = await decryptMessage(loginString, encryptedMessage, ivString);

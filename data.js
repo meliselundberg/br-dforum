@@ -97,7 +97,7 @@ const threads = [
         avatarSeed: "KanelKungen",
         time: "Publicerat i dag 08:13",
         text: `
-          Jag hörde en smäll i går kväll. Inte från serveringen, tror jag.
+          Det är på riktigt, såg poliser där i Torsdags kväll.
         `
       },
       {
@@ -106,7 +106,7 @@ const threads = [
         avatarSeed: "MjolMange",
         time: "Publicerat i dag 09:41",
         text: `
-          Min kusin säger att polisen frågade om någon sett rörelse vid ett lågt fönster. Vet inte vilket rum det gäller.
+          Min kusin säger att polisen frågade om någon sett rörelse vid ett fönster. Vet inte vilket rum det gäller.
         `
       }
     ]

@@ -243,20 +243,39 @@ async function tryLogin() {
     })
     .join("");
 
+  const wrongParts = [];
+
+  if (await sha256(username) !== "e9f3a5b1e0b5b7f20ff8715dc05fa2b66d03278ac5572c2d34e2aa23965b66b7") {
+    wrongParts.push("användarnamn");
+  }
+
+  if (await sha256(password) !== "3d1eebfd8b093e361754345d487dd121412ae01dd4417fb7be0fb3e9ce763383") {
+    wrongParts.push("lösenord");
+  }
+
+  if (await sha256(code) !== "68a7c86c17a8f1c7e15f9b64719a748228b02f4e6b39f1d3408c77cf8b1564c3") {
+    wrongParts.push("säkerhetskod");
+  }
+
+  if (wrongParts.length > 0) {
+    document.getElementById("loginError").textContent = makeLoginErrorMessage(wrongParts);
+    return;
+  }
+
   const loginString = username + "|" + password + "|" + code;
 
   const encryptedMessage = "V4NASR3dH8MelmQkHnuDi5Lc66LKEqdRaaqg28WBJ8XHcyt0dBt2q3q0s9bbQyfH5VT4zts2tBCtOKAS";
   const ivString = "PpYX98LYVMhuzJdD";
 
   try {
-      const decodedMessage = await decryptMessage(loginString, encryptedMessage, ivString);
-    
-      sessionStorage.setItem("brodnyttOrderText", decodedMessage);
-      window.location.href = "profile.html";
-    } catch (error) {
-      document.getElementById("loginError").textContent = "Fel inloggning. Kontrollera användarnamn, lösenord och säkerhetskod.";
-    }
+    const decodedMessage = await decryptMessage(loginString, encryptedMessage, ivString);
+
+    sessionStorage.setItem("brodnyttOrderText", decodedMessage);
+    window.location.href = "profile.html";
+  } catch (error) {
+    document.getElementById("loginError").textContent = "Något gick fel vid inloggningen.";
   }
+}
 
 async function decryptMessage(loginString, encryptedMessage, ivString) {
   const encoder = new TextEncoder();

@@ -234,46 +234,47 @@ function closeLogin() {
 }
 
 async function tryLogin() {
-  const username = document.getElementById("loginUsername").value.trim().toLowerCase();
-  const password = document.getElementById("loginPassword").value.trim().toLowerCase();
-
-  const code = Array.from(document.querySelectorAll(".code-digit"))
-    .map(function(input) {
-      return input.value.trim();
-    })
-    .join("");
-
-  const wrongParts = [];
-
-  if (await sha256(username) !== "e9f3a5b1e0b5b7f20ff8715dc05fa2b66d03278ac5572c2d34e2aa23965b66b7") {
-    wrongParts.push("användarnamn");
-  }
-
-  if (await sha256(password) !== "3d1eebfd8b093e361754345d487dd121412ae01dd4417fb7be0fb3e9ce763383") {
-    wrongParts.push("lösenord");
-  }
-
-  if (await sha256(code) !== "68a7c86c17a8f1c7e15f9b64719a748228b02f4e6b39f1d3408c77cf8b1564c3") {
-    wrongParts.push("säkerhetskod");
-  }
-
-  if (wrongParts.length > 0) {
-    document.getElementById("loginError").textContent = makeLoginErrorMessage(wrongParts);
-    return;
-  }
-
-  const loginString = username + "|" + password + "|" + code;
-
-  const encryptedMessage = "V4NASR3dH8MelmQkHnuDi5Lc66LKEqdRaaqg28WBJ8XHcyt0dBt2q3q0s9bbQyfH5VT4zts2tBCtOKAS";
-  const ivString = "PpYX98LYVMhuzJdD";
-
   try {
+    const username = document.getElementById("loginUsername").value.trim().toLowerCase();
+    const password = document.getElementById("loginPassword").value.trim().toLowerCase();
+
+    const code = Array.from(document.querySelectorAll(".code-digit"))
+      .map(function(input) {
+        return input.value.trim();
+      })
+      .join("");
+
+    const wrongParts = [];
+
+    if (await sha256(username) !== "f51b3450bc1fa0d4fa4a20f23451b0da7e40e6c4f0c9f6c31913a5d7096ca99a") {
+      wrongParts.push("användarnamn");
+    }
+
+    if (await sha256(password) !== "b427c3dec9045990213ccc3dbffbdf189e75c7ce18e1a86ed7c4fe9a2db5d627") {
+      wrongParts.push("lösenord");
+    }
+
+    if (await sha256(code) !== "9d73bfb92adaebaa346e5c12db11ce0bf0dc5ae059677dcec5198d7302d32493") {
+      wrongParts.push("säkerhetskod");
+    }
+
+    if (wrongParts.length > 0) {
+      document.getElementById("loginError").textContent = makeLoginErrorMessage(wrongParts);
+      return;
+    }
+
+    const loginString = username + "|" + password + "|" + code;
+
+    const encryptedMessage = "V4NASR3dH8MelmQkHnuDi5Lc66LKEqdRaaqg28WBJ8XHcyt0dBt2q3q0s9bbQyfH5VT4zts2tBCtOKAS";
+    const ivString = "PpYX98LYVMhuzJdD";
+
     const decodedMessage = await decryptMessage(loginString, encryptedMessage, ivString);
 
     sessionStorage.setItem("brodnyttOrderText", decodedMessage);
     window.location.href = "profile.html";
   } catch (error) {
-    document.getElementById("loginError").textContent = "Något gick fel vid inloggningen.";
+    document.getElementById("loginError").textContent =
+      "Inloggningen kunde inte kontrolleras. Testa att öppna sidan via GitHub Pages, inte som lokal fil.";
   }
 }
 

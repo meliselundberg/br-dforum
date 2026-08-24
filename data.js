@@ -297,11 +297,30 @@ const threads = [
           Då är det klart. Kör grädde och hallon. Krångla inte till det.
         `
       },
+            {
+        user: "SockerTopp",
+        role: "Registrerad",
+        avatarSeed: "SockerTopp",
+        time: "Publicerat 1/8 kl. 11:09",
+        text: `
+          +1 på gräddtårta med bär (typ hallon), alla gillar det!
+        `
+      },
       {
         user: "bröderyeastmode",
         role: "Medlem",
         avatarPattern: "111100",
         avatarSeed: "broderanneli3",
+        time: "Publicerat 1/8 kl. 12:08",
+        text: `
+          Tack för alla tips, ska fundera lite och beställa snart.
+        `
+      },
+      {
+        user: "bröderyeastmode",
+        role: "Medlem",
+        avatarPattern: "111100",
+        avatarSeed: "broderanneli4",
         time: "Publicerat 7/8 kl. 16:12",
         text: `
           Uppdatering: det blev gräddtårta med hallon. Pappa blev rörd, trots att han först påstod att han bara ville ha kaffe.

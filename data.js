@@ -319,7 +319,7 @@ const threads = [
       {
         user: "bröderyeastmode",
         role: "Medlem",
-        avatarPattern: "111100",
+        avatarPattern: "011000",
         avatarSeed: "broderanneli4",
         time: "Publicerat 7/8 kl. 16:12",
         text: `

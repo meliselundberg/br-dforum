@@ -154,15 +154,15 @@ function patternFromSeed(seed) {
 
 function makeGridAvatar(pattern, color) {
   const positions = [
-    { x: 0,  y: 0  },
-    { x: 50, y: 0  },
-    { x: 0,  y: 34 },
-    { x: 50, y: 34 },
-    { x: 0,  y: 68 },
-    { x: 50, y: 68 }
+    { x: 6,  y: 6  },
+    { x: 52, y: 6  },
+    { x: 6,  y: 37 },
+    { x: 52, y: 37 },
+    { x: 6,  y: 68 },
+    { x: 52, y: 68 }
   ];
 
-  let rects = `<rect width="100" height="100" fill="#000000"/>`;
+  let rects = `<rect width="100" height="100" rx="12" ry="12" fill="#000000"/>`;
 
   for (let i = 0; i < 6; i++) {
     const fill = pattern[i] === "1" ? color : "#000000";
@@ -171,8 +171,10 @@ function makeGridAvatar(pattern, color) {
       <rect
         x="${positions[i].x}"
         y="${positions[i].y}"
-        width="49"
-        height="32"
+        width="42"
+        height="24"
+        rx="7"
+        ry="7"
         fill="${fill}"
       />
     `;

@@ -14,9 +14,7 @@ function renderThreadList() {
     const replies = Math.max(thread.posts.length - 1, 0);
     const latestPost = thread.posts[thread.posts.length - 1];
 
-    const iconHtml = thread.id === "thread1"
-      ? `<div class="icon secret-icon" onclick="showCroissantPopup(event)">${thread.icon}</div>`
-      : `<div class="icon">${thread.icon}</div>`;
+    const iconHtml = `<div class="icon">${thread.icon}</div>`;
 
     return `
       <div class="forum-row" onclick="openThread('${thread.id}')">
@@ -201,17 +199,6 @@ function initAvatars() {
       img.src = makeGridAvatar(patternFromSeed(seed), color);
     }
   });
-}
-
-/* POPUPS */
-
-function showCroissantPopup(event) {
-  event.stopPropagation();
-  document.getElementById("croissantPopup").style.display = "block";
-}
-
-function closeCroissantPopup() {
-  document.getElementById("croissantPopup").style.display = "none";
 }
 
 /* LOGIN */

@@ -199,15 +199,6 @@ aside .box {
   font-size: 31px;
 }
 
-.secret-icon {
-  cursor: help;
-}
-
-.secret-icon:hover {
-  outline: 3px solid rgba(196, 145, 69, 0.40);
-  outline-offset: 3px;
-}
-
 .thread-title {
   color: #813021;
   font-family: "Cormorant Garamond", Georgia, serif;

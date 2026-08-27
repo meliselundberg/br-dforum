@@ -57,7 +57,7 @@ const threads = [
         avatarSeed: "Kaffekopp",
         time: "Publicerat 2025-09-16 kl. 17:04",
         text: `
-          Instämmer om Brödernas. Litet ställe, men bra kvalitet. Tror entrén ligger mot Söderläge-sidan, om du kommer från bron.
+          Instämmer om Brödernas. Litet ställe, men riktigt bra kvalitet.
         `
       },
       {

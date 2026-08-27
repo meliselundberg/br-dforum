@@ -8,7 +8,7 @@ const threads = [
     views: 1942,
     posts: [
       {
-        user: "BridgeOchBullälskaren",
+        user: "AgnetaÉclair",
         role: "Medlem sedan 2018",
         avatarSeed: "BridgeOchBullalskaren",
         time: "Publicerat 2025-09-16 kl. 14:08",
@@ -61,7 +61,7 @@ const threads = [
         `
       },
       {
-        user: "BridgeOchBullälskaren",
+        user: "AgnetaÉclair",
         role: "Medlem sedan 2018",
         avatarSeed: "BridgeOchBullalskaren2",
         time: "Publicerat 2025-09-18 kl. 09:22",

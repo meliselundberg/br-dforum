@@ -580,13 +580,7 @@ function drawBread(item) {
   drawShadow(0, item.size * 0.45, item.size * 0.5, item.size * 0.14);
 
   if (img.complete && img.naturalWidth > 0) {
-    ctx.drawImage(
-      img,
-      -item.size / 2,
-      -item.size / 2,
-      item.size,
-      item.size
-    );
+    drawImageKeepRatio(img, item.size);
   } else {
     drawFallbackBread(item.size);
   }
@@ -613,13 +607,7 @@ function drawRat(item) {
   drawShadow(0, item.size * 0.44, item.size * 0.46, item.size * 0.13);
 
   if (ratImage.complete && ratImage.naturalWidth > 0) {
-    ctx.drawImage(
-      ratImage,
-      -item.size / 2,
-      -item.size / 2,
-      item.size,
-      item.size
-    );
+    drawImageKeepRatio(ratImage, item.size);
   } else {
     ctx.font = item.size + "px serif";
     ctx.textAlign = "center";
@@ -628,6 +616,29 @@ function drawRat(item) {
   }
 
   ctx.restore();
+}
+
+function drawImageKeepRatio(img, maxSize) {
+  const ratio = img.naturalWidth / img.naturalHeight;
+
+  let width;
+  let height;
+
+  if (ratio >= 1) {
+    width = maxSize;
+    height = maxSize / ratio;
+  } else {
+    height = maxSize;
+    width = maxSize * ratio;
+  }
+
+  ctx.drawImage(
+    img,
+    -width / 2,
+    -height / 2,
+    width,
+    height
+  );
 }
 
 function drawBasket() {

@@ -24,12 +24,41 @@ let lastTime = 0;
 let floatingDecor = [];
 
 const basket = {
-  x: canvas.width / 2 - 78,
-  y: canvas.height - 96,
+  x: 0,
+  y: 0,
   width: 156,
   height: 64,
-  speed: 850
+  speed: 920
 };
+
+function resizeCanvas() {
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+
+  canvas.width = Math.round(rect.width * dpr);
+  canvas.height = Math.round(rect.height * dpr);
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  basket.width = Math.min(156, rect.width * 0.24);
+  basket.height = basket.width * 0.42;
+  basket.y = rect.height - basket.height - 26;
+  basket.x = clamp(basket.x, 14, rect.width - basket.width - 14);
+
+  createFloatingDecor();
+
+  if (!gameRunning) {
+    drawStartScreen();
+  }
+}
+
+function gameWidth() {
+  return canvas.getBoundingClientRect().width;
+}
+
+function gameHeight() {
+  return canvas.getBoundingClientRect().height;
+}
 
 function resetGame() {
   score = 0;
@@ -40,9 +69,8 @@ function resetGame() {
   spawnTimer = 0;
   lastTime = 0;
 
-  basket.x = canvas.width / 2 - basket.width / 2;
+  basket.x = gameWidth() / 2 - basket.width / 2;
 
-  createFloatingDecor();
   updateStats();
   hideModal();
   startButton.style.display = "inline-flex";
@@ -57,6 +85,8 @@ function startGame() {
   fallingItems = [];
   spawnTimer = 0;
   lastTime = performance.now();
+
+  basket.x = gameWidth() / 2 - basket.width / 2;
 
   updateStats();
   hideModal();
@@ -101,7 +131,7 @@ function updateBasket(delta) {
     basket.x += basket.speed * delta;
   }
 
-  basket.x = clamp(basket.x, 14, canvas.width - basket.width - 14);
+  basket.x = clamp(basket.x, 14, gameWidth() - basket.width - 14);
 }
 
 function updateSpawning(delta) {
@@ -114,17 +144,20 @@ function updateSpawning(delta) {
 }
 
 function getSpawnRate() {
-  if (score >= 40) return 0.4;
-  if (score >= 25) return 0.5;
-  if (score >= 10) return 0.64;
-  return 0.76;
+  if (score >= 40) return 0.38;
+  if (score >= 25) return 0.49;
+  if (score >= 10) return 0.62;
+  return 0.74;
 }
 
 function getFallSpeed() {
-  if (score >= 40) return random(300, 390);
-  if (score >= 25) return random(245, 330);
-  if (score >= 10) return random(200, 280);
-  return random(160, 235);
+  const h = gameHeight();
+  const base = h / 4.2;
+
+  if (score >= 40) return random(base * 1.45, base * 1.8);
+  if (score >= 25) return random(base * 1.22, base * 1.58);
+  if (score >= 10) return random(base * 1.0, base * 1.35);
+  return random(base * 0.84, base * 1.12);
 }
 
 function getTrashChance() {
@@ -136,12 +169,15 @@ function getTrashChance() {
 
 function spawnItem() {
   const isTrash = Math.random() < getTrashChance();
+  const size = isTrash
+    ? random(40, 54)
+    : random(42, 60);
 
   fallingItems.push({
     type: isTrash ? "trash" : "bread",
-    x: random(42, canvas.width - 42),
-    y: -60,
-    size: isTrash ? random(40, 54) : random(40, 58),
+    x: random(size, gameWidth() - size),
+    y: -70,
+    size: size,
     speed: getFallSpeed(),
     rotation: random(-0.45, 0.45),
     rotationSpeed: random(-1.25, 1.25),
@@ -159,7 +195,7 @@ function updateItems(delta) {
   const remainingItems = [];
 
   for (const item of fallingItems) {
-    if (item.y - item.size > canvas.height) {
+    if (item.y - item.size > gameHeight()) {
       if (item.type === "bread") {
         misses++;
         updateStats();
@@ -266,51 +302,66 @@ function drawStartScreen() {
   drawGround();
   drawBasket();
 
+  const w = gameWidth();
+  const h = gameHeight();
+
   ctx.save();
   ctx.textAlign = "center";
 
-  drawRoundedPanel(canvas.width / 2 - 285, 198, 570, 160, 30, "rgba(255, 255, 255, 0.72)", "rgba(127, 38, 29, 0.13)");
+  drawRoundedPanel(
+    w / 2 - Math.min(290, w * 0.43),
+    h * 0.32,
+    Math.min(580, w * 0.86),
+    158,
+    30,
+    "rgba(255, 255, 255, 0.72)",
+    "rgba(127, 38, 29, 0.13)"
+  );
 
   ctx.fillStyle = "#7f261d";
-  ctx.font = "700 78px Georgia";
-  ctx.fillText("BRÖDREGN", canvas.width / 2, 264);
+  ctx.font = "700 " + Math.min(78, w * 0.115) + "px Georgia";
+  ctx.fillText("BRÖDREGN", w / 2, h * 0.32 + 65);
 
   ctx.fillStyle = "#6b4127";
-  ctx.font = "900 24px Arial";
-  ctx.fillText("Fånga 50 bröd. Undvik soporna.", canvas.width / 2, 308);
+  ctx.font = "900 " + Math.min(24, w * 0.038) + "px Arial";
+  ctx.fillText("Fånga 50 bröd. Undvik soporna.", w / 2, h * 0.32 + 108);
 
-  ctx.font = "700 17px Arial";
-  ctx.fillText("Tryck på startknappen för att börja.", canvas.width / 2, 338);
+  ctx.font = "700 " + Math.min(17, w * 0.03) + "px Arial";
+  ctx.fillText("Tryck på startknappen för att börja.", w / 2, h * 0.32 + 136);
 
   ctx.restore();
 }
 
 function clearCanvas() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, gameWidth(), gameHeight());
 }
 
 function drawBackground() {
-  const sky = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  sky.addColorStop(0, "#aeeeff");
-  sky.addColorStop(0.45, "#ffeeb6");
+  const w = gameWidth();
+  const h = gameHeight();
+
+  const sky = ctx.createLinearGradient(0, 0, 0, h);
+  sky.addColorStop(0, "#9cecff");
+  sky.addColorStop(0.44, "#fff0b8");
   sky.addColorStop(1, "#ffbd78");
 
   ctx.fillStyle = sky;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0, 0, w, h);
 
-  drawSun(canvas.width - 105, 105);
-  drawCloud(130, 118, 1.1);
-  drawCloud(720, 150, 0.88);
-  drawCloud(430, 75, 0.68);
-
+  drawSun(w - 88, 92, Math.min(1, w / 650));
+  drawCloud(w * 0.16, 118, Math.min(1.1, w / 620));
+  drawCloud(w * 0.78, 158, Math.min(0.9, w / 650));
+  drawCloud(w * 0.48, 75, Math.min(0.7, w / 720));
+  drawHills();
   drawTinySparkles();
 }
 
-function drawSun(x, y) {
+function drawSun(x, y, scale) {
   ctx.save();
   ctx.translate(x, y);
+  ctx.scale(scale, scale);
 
-  ctx.fillStyle = "rgba(255, 210, 91, 0.26)";
+  ctx.fillStyle = "rgba(255, 210, 91, 0.28)";
   ctx.beginPath();
   ctx.arc(0, 0, 72, 0, Math.PI * 2);
   ctx.fill();
@@ -343,7 +394,7 @@ function drawCloud(x, y, scale) {
   ctx.translate(x, y);
   ctx.scale(scale, scale);
 
-  ctx.fillStyle = "rgba(255, 255, 255, 0.76)";
+  ctx.fillStyle = "rgba(255, 255, 255, 0.78)";
   ctx.strokeStyle = "rgba(126, 63, 31, 0.09)";
   ctx.lineWidth = 3;
 
@@ -358,14 +409,49 @@ function drawCloud(x, y, scale) {
   ctx.restore();
 }
 
+function drawHills() {
+  const w = gameWidth();
+  const h = gameHeight();
+
+  ctx.save();
+
+  ctx.fillStyle = "rgba(255, 154, 191, 0.25)";
+  ctx.beginPath();
+  ctx.moveTo(0, h * 0.78);
+  ctx.quadraticCurveTo(w * 0.22, h * 0.66, w * 0.48, h * 0.78);
+  ctx.quadraticCurveTo(w * 0.75, h * 0.9, w, h * 0.75);
+  ctx.lineTo(w, h);
+  ctx.lineTo(0, h);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle = "rgba(196, 145, 69, 0.22)";
+  ctx.beginPath();
+  ctx.moveTo(0, h * 0.84);
+  ctx.quadraticCurveTo(w * 0.36, h * 0.7, w * 0.68, h * 0.86);
+  ctx.quadraticCurveTo(w * 0.86, h * 0.95, w, h * 0.82);
+  ctx.lineTo(w, h);
+  ctx.lineTo(0, h);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.restore();
+}
+
 function drawTinySparkles() {
+  const w = gameWidth();
+  const h = gameHeight();
+
   ctx.save();
 
   for (let i = 0; i < 28; i++) {
-    const x = (i * 129 + 43) % canvas.width;
-    const y = (i * 71 + 29) % 420 + 40;
+    const x = (i * 129 + 43) % w;
+    const y = ((i * 71 + 29) % (h * 0.62)) + 40;
 
-    ctx.fillStyle = i % 2 === 0 ? "rgba(255, 154, 191, 0.42)" : "rgba(255, 255, 255, 0.52)";
+    ctx.fillStyle = i % 2 === 0
+      ? "rgba(255, 154, 191, 0.42)"
+      : "rgba(255, 255, 255, 0.54)";
+
     ctx.beginPath();
     ctx.moveTo(x, y - 5);
     ctx.lineTo(x + 4, y);
@@ -383,8 +469,8 @@ function createFloatingDecor() {
 
   for (let i = 0; i < 18; i++) {
     floatingDecor.push({
-      x: random(20, canvas.width - 20),
-      y: random(60, canvas.height - 130),
+      x: random(20, Math.max(40, gameWidth() - 20)),
+      y: random(60, Math.max(120, gameHeight() - 130)),
       size: random(4, 10),
       speed: random(6, 16),
       type: i % 3
@@ -396,9 +482,9 @@ function updateDecor(delta) {
   for (const decor of floatingDecor) {
     decor.y += decor.speed * delta;
 
-    if (decor.y > canvas.height - 90) {
+    if (decor.y > gameHeight() - 90) {
       decor.y = 40;
-      decor.x = random(20, canvas.width - 20);
+      decor.x = random(20, gameWidth() - 20);
     }
   }
 }
@@ -416,7 +502,7 @@ function drawFloatingDecor() {
       ctx.fillStyle = "rgba(255, 154, 191, 0.32)";
       drawHeart(decor.x, decor.y, decor.size);
     } else {
-      ctx.fillStyle = "rgba(255, 255, 255, 0.42)";
+      ctx.fillStyle = "rgba(255, 255, 255, 0.44)";
       ctx.beginPath();
       ctx.moveTo(decor.x, decor.y - decor.size);
       ctx.lineTo(decor.x + decor.size, decor.y);
@@ -439,22 +525,26 @@ function drawHeart(x, y, size) {
 }
 
 function drawGround() {
-  ctx.save();
+  const w = gameWidth();
+  const h = gameHeight();
 
+  ctx.save();
   ctx.fillStyle = "rgba(126, 63, 31, 0.08)";
   ctx.beginPath();
-  ctx.ellipse(canvas.width / 2, canvas.height + 18, canvas.width * 0.62, 82, 0, 0, Math.PI * 2);
+  ctx.ellipse(w / 2, h + 18, w * 0.62, 82, 0, 0, Math.PI * 2);
   ctx.fill();
-
   ctx.restore();
 }
 
 function drawPreviewItems() {
+  const w = gameWidth();
+  const h = gameHeight();
+
   const previewItems = [
-    { x: 155, y: 205, size: 46, rotation: -0.25, breadType: 0, faceOffset: 0 },
-    { x: 740, y: 265, size: 44, rotation: 0.38, breadType: 1, faceOffset: 0 },
-    { x: 245, y: 410, size: 42, rotation: 0.2, breadType: 2, faceOffset: 0 },
-    { x: 665, y: 415, size: 50, rotation: -0.15, breadType: 3, faceOffset: 0 }
+    { x: w * 0.17, y: h * 0.26, size: 48, rotation: -0.25, breadType: 0, faceOffset: 0 },
+    { x: w * 0.82, y: h * 0.34, size: 46, rotation: 0.38, breadType: 1, faceOffset: 0 },
+    { x: w * 0.26, y: h * 0.66, size: 44, rotation: 0.2, breadType: 2, faceOffset: 0 },
+    { x: w * 0.74, y: h * 0.67, size: 52, rotation: -0.15, breadType: 3, faceOffset: 0 }
   ];
 
   previewItems.forEach(drawBread);
@@ -745,15 +835,12 @@ function drawShadow(x, y, radiusX, radiusY) {
 
 function drawRoundedPanel(x, y, width, height, radius, fill, stroke) {
   ctx.save();
-
   ctx.fillStyle = fill;
   ctx.strokeStyle = stroke;
   ctx.lineWidth = 3;
-
   roundedRect(x, y, width, height, radius);
   ctx.fill();
   ctx.stroke();
-
   ctx.restore();
 }
 
@@ -800,19 +887,22 @@ function handleTouchMove(event) {
 
   const touch = event.touches[0];
   const rect = canvas.getBoundingClientRect();
-
-  const scaleX = canvas.width / rect.width;
-  const touchX = (touch.clientX - rect.left) * scaleX;
+  const touchX = touch.clientX - rect.left;
 
   basket.x = touchX - basket.width / 2;
-  basket.x = clamp(basket.x, 14, canvas.width - basket.width - 14);
+  basket.x = clamp(basket.x, 14, gameWidth() - basket.width - 14);
 
   if (!gameRunning && !gameOver) {
     drawStartScreen();
   }
 }
 
+window.addEventListener("resize", function() {
+  resizeCanvas();
+});
+
 startButton.addEventListener("click", startGame);
 restartButton.addEventListener("click", startGame);
 
+resizeCanvas();
 resetGame();

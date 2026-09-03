@@ -23,11 +23,11 @@ let spawnTimer = 0;
 let lastTime = 0;
 
 const basket = {
-  x: canvas.width / 2 - 55,
-  y: canvas.height - 72,
-  width: 110,
-  height: 46,
-  speed: 470
+  x: canvas.width / 2 - 70,
+  y: canvas.height - 88,
+  width: 140,
+  height: 56,
+  speed: 760
 };
 
 function resetGame() {
@@ -43,6 +43,7 @@ function resetGame() {
 
   updateStats();
   hideModal();
+  startButton.style.display = "inline-flex";
   drawStartScreen();
 }
 
@@ -97,59 +98,58 @@ function updateBasket(delta) {
     basket.x += basket.speed * delta;
   }
 
-  basket.x = clamp(basket.x, 10, canvas.width - basket.width - 10);
+  basket.x = clamp(basket.x, 12, canvas.width - basket.width - 12);
 }
 
 function updateSpawning(delta) {
   spawnTimer -= delta;
 
-  const spawnRate = getSpawnRate();
-
   if (spawnTimer <= 0) {
     spawnItem();
-    spawnTimer = spawnRate;
+    spawnTimer = getSpawnRate();
   }
 }
 
 function getSpawnRate() {
-  if (score >= 40) return 0.46;
-  if (score >= 25) return 0.58;
-  if (score >= 10) return 0.72;
-  return 0.86;
+  if (score >= 40) return 0.42;
+  if (score >= 25) return 0.52;
+  if (score >= 10) return 0.66;
+  return 0.78;
 }
 
 function getFallSpeed() {
-  if (score >= 40) return random(250, 340);
-  if (score >= 25) return random(210, 295);
-  if (score >= 10) return random(175, 250);
-  return random(145, 210);
+  if (score >= 40) return random(285, 370);
+  if (score >= 25) return random(235, 320);
+  if (score >= 10) return random(190, 265);
+  return random(155, 225);
+}
+
+function getTrashChance() {
+  if (score >= 40) return 0.23;
+  if (score >= 25) return 0.19;
+  if (score >= 10) return 0.15;
+  return 0.1;
 }
 
 function spawnItem() {
   const isTrash = Math.random() < getTrashChance();
 
-  const item = {
+  fallingItems.push({
     type: isTrash ? "trash" : "bread",
-    x: random(26, canvas.width - 26),
-    y: -40,
-    size: isTrash ? random(30, 42) : random(32, 46),
+    x: random(34, canvas.width - 34),
+    y: -54,
+    size: isTrash ? random(34, 48) : random(34, 50),
     speed: getFallSpeed(),
-    rotation: random(-0.35, 0.35)
-  };
-
-  fallingItems.push(item);
-}
-
-function getTrashChance() {
-  if (score >= 40) return 0.24;
-  if (score >= 25) return 0.20;
-  if (score >= 10) return 0.16;
-  return 0.12;
+    rotation: random(-0.45, 0.45),
+    rotationSpeed: random(-1.2, 1.2),
+    breadType: Math.floor(random(0, 4))
+  });
 }
 
 function updateItems(delta) {
   for (const item of fallingItems) {
     item.y += item.speed * delta;
+    item.rotation += item.rotationSpeed * delta;
   }
 
   const remainingItems = [];
@@ -206,7 +206,7 @@ function isCaught(item) {
 
   const basketLeft = basket.x;
   const basketRight = basket.x + basket.width;
-  const basketTop = basket.y;
+  const basketTop = basket.y + 8;
   const basketBottom = basket.y + basket.height;
 
   return (
@@ -220,18 +220,18 @@ function isCaught(item) {
 function winGame() {
   gameRunning = false;
   gameOver = true;
-  startButton.style.display = "flex";
+  startButton.style.display = "inline-flex";
 
   showModal(
     "DU VANN!",
-    "-10 prickar\nVisa detta för arrangör."
+    "-10 prickar\nVisa för läggarlaget."
   );
 }
 
 function loseGame(title, text) {
   gameRunning = false;
   gameOver = true;
-  startButton.style.display = "flex";
+  startButton.style.display = "inline-flex";
 
   showModal(title, text);
 }
@@ -256,20 +256,23 @@ function drawGame() {
 function drawStartScreen() {
   clearCanvas();
   drawBackground();
+  drawDecorativeBreadRain();
   drawBasket();
 
   ctx.save();
   ctx.textAlign = "center";
+
   ctx.fillStyle = "#7f261d";
-  ctx.font = "700 54px Georgia";
-  ctx.fillText("BRÖDREGN", canvas.width / 2, 170);
+  ctx.font = "700 76px Georgia";
+  ctx.fillText("BRÖDREGN", canvas.width / 2, 245);
 
   ctx.fillStyle = "#604b37";
-  ctx.font = "700 22px Arial";
-  ctx.fillText("Fånga 50 bröd. Undvik soporna.", canvas.width / 2, 215);
+  ctx.font = "800 25px Arial";
+  ctx.fillText("Fånga 50 bröd. Undvik soporna.", canvas.width / 2, 292);
 
-  ctx.font = "600 17px Arial";
-  ctx.fillText("Tryck på startknappen för att börja.", canvas.width / 2, 252);
+  ctx.font = "600 18px Arial";
+  ctx.fillText("Tryck på startknappen för att börja.", canvas.width / 2, 326);
+
   ctx.restore();
 }
 
@@ -278,31 +281,76 @@ function clearCanvas() {
 }
 
 function drawBackground() {
-  ctx.save();
+  const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  gradient.addColorStop(0, "#fff8ea");
+  gradient.addColorStop(0.55, "#f7e0bd");
+  gradient.addColorStop(1, "#e8bd7c");
 
-  ctx.fillStyle = "#fff7ea";
+  ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = "rgba(196, 145, 69, 0.12)";
-  for (let i = 0; i < 26; i++) {
-    const x = (i * 97) % canvas.width;
-    const y = (i * 53) % canvas.height;
-    ctx.beginPath();
-    ctx.arc(x, y, 2.2, 0, Math.PI * 2);
-    ctx.fill();
-  }
+  drawCloud(120, 100, 1);
+  drawCloud(720, 130, 0.85);
+  drawCloud(450, 75, 0.65);
 
-  ctx.fillStyle = "rgba(168, 58, 44, 0.08)";
+  ctx.fillStyle = "rgba(127, 38, 29, 0.07)";
   ctx.beginPath();
-  ctx.arc(100, 85, 70, 0, Math.PI * 2);
+  ctx.arc(80, 520, 170, 0, Math.PI * 2);
   ctx.fill();
 
-  ctx.fillStyle = "rgba(196, 145, 69, 0.08)";
+  ctx.fillStyle = "rgba(196, 145, 69, 0.12)";
   ctx.beginPath();
-  ctx.arc(canvas.width - 80, 120, 95, 0, Math.PI * 2);
+  ctx.arc(850, 500, 210, 0, Math.PI * 2);
+  ctx.fill();
+
+  drawCrumbs();
+}
+
+function drawCloud(x, y, scale) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(scale, scale);
+
+  ctx.fillStyle = "rgba(255, 252, 245, 0.72)";
+  ctx.beginPath();
+  ctx.arc(-46, 12, 28, 0, Math.PI * 2);
+  ctx.arc(-16, -6, 36, 0, Math.PI * 2);
+  ctx.arc(26, 4, 30, 0, Math.PI * 2);
+  ctx.arc(52, 16, 22, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.restore();
+}
+
+function drawCrumbs() {
+  ctx.save();
+
+  for (let i = 0; i < 54; i++) {
+    const x = (i * 107 + 31) % canvas.width;
+    const y = (i * 61 + 47) % canvas.height;
+    const radius = 1.4 + (i % 4) * 0.45;
+
+    ctx.fillStyle = i % 3 === 0
+      ? "rgba(127, 38, 29, 0.11)"
+      : "rgba(122, 84, 39, 0.12)";
+
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+function drawDecorativeBreadRain() {
+  const previewItems = [
+    { x: 150, y: 190, size: 42, rotation: -0.3, breadType: 0 },
+    { x: 705, y: 245, size: 38, rotation: 0.4, breadType: 1 },
+    { x: 250, y: 385, size: 35, rotation: 0.25, breadType: 2 },
+    { x: 625, y: 390, size: 46, rotation: -0.25, breadType: 3 }
+  ];
+
+  previewItems.forEach(drawBread);
 }
 
 function drawFallingItems() {
@@ -316,22 +364,34 @@ function drawFallingItems() {
 }
 
 function drawBread(item) {
+  if (item.breadType === 1) {
+    drawBaguette(item);
+  } else if (item.breadType === 2) {
+    drawBun(item);
+  } else if (item.breadType === 3) {
+    drawCroissant(item);
+  } else {
+    drawLoaf(item);
+  }
+}
+
+function drawLoaf(item) {
   ctx.save();
   ctx.translate(item.x, item.y);
   ctx.rotate(item.rotation);
 
-  const w = item.size * 1.35;
-  const h = item.size * 0.82;
+  const w = item.size * 1.42;
+  const h = item.size * 0.86;
 
   ctx.fillStyle = "#c9893d";
-  ctx.strokeStyle = "#7a5427";
+  ctx.strokeStyle = "#6c3f1d";
   ctx.lineWidth = 3;
 
   roundedRect(-w / 2, -h / 2, w, h, h / 2);
   ctx.fill();
   ctx.stroke();
 
-  ctx.strokeStyle = "#fff2d8";
+  ctx.strokeStyle = "#fff0d0";
   ctx.lineWidth = 3;
 
   for (let i = -1; i <= 1; i++) {
@@ -344,6 +404,81 @@ function drawBread(item) {
   ctx.restore();
 }
 
+function drawBaguette(item) {
+  ctx.save();
+  ctx.translate(item.x, item.y);
+  ctx.rotate(item.rotation);
+
+  const w = item.size * 1.75;
+  const h = item.size * 0.46;
+
+  ctx.fillStyle = "#d3994f";
+  ctx.strokeStyle = "#6c3f1d";
+  ctx.lineWidth = 3;
+
+  roundedRect(-w / 2, -h / 2, w, h, h / 2);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.strokeStyle = "#fff0d0";
+  ctx.lineWidth = 3;
+
+  for (let i = -1; i <= 1; i++) {
+    ctx.beginPath();
+    ctx.moveTo(i * 17 - 8, -h * 0.25);
+    ctx.lineTo(i * 17 + 7, h * 0.2);
+    ctx.stroke();
+  }
+
+  ctx.restore();
+}
+
+function drawBun(item) {
+  ctx.save();
+  ctx.translate(item.x, item.y);
+  ctx.rotate(item.rotation);
+
+  const s = item.size;
+
+  ctx.fillStyle = "#d49b4c";
+  ctx.strokeStyle = "#6c3f1d";
+  ctx.lineWidth = 3;
+
+  ctx.beginPath();
+  ctx.arc(0, 0, s * 0.52, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.strokeStyle = "#fff0d0";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(0, 0, s * 0.26, 0.2, Math.PI * 1.7);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+function drawCroissant(item) {
+  ctx.save();
+  ctx.translate(item.x, item.y);
+  ctx.rotate(item.rotation);
+
+  const s = item.size;
+
+  ctx.fillStyle = "#d69b44";
+  ctx.strokeStyle = "#6c3f1d";
+  ctx.lineWidth = 3;
+
+  ctx.beginPath();
+  ctx.arc(0, 0, s * 0.55, 0.15 * Math.PI, 0.85 * Math.PI, false);
+  ctx.arc(0, 0, s * 0.28, 0.85 * Math.PI, 0.15 * Math.PI, true);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.restore();
+}
+
 function drawTrash(item) {
   ctx.save();
   ctx.translate(item.x, item.y);
@@ -351,21 +486,21 @@ function drawTrash(item) {
 
   const s = item.size;
 
-  ctx.fillStyle = "#3b342e";
+  ctx.fillStyle = "#34302b";
   ctx.strokeStyle = "#1f1a16";
   ctx.lineWidth = 3;
 
-  roundedRect(-s / 2, -s / 2, s, s * 1.05, 8);
+  roundedRect(-s / 2, -s / 2, s, s * 1.08, 9);
   ctx.fill();
   ctx.stroke();
 
-  ctx.fillStyle = "#2b2520";
+  ctx.fillStyle = "#24201d";
   ctx.beginPath();
-  ctx.moveTo(-s / 2, -s / 2 + 5);
-  ctx.lineTo(-s / 4, -s / 2 - 10);
-  ctx.lineTo(0, -s / 2 + 3);
-  ctx.lineTo(s / 4, -s / 2 - 10);
-  ctx.lineTo(s / 2, -s / 2 + 5);
+  ctx.moveTo(-s / 2, -s / 2 + 6);
+  ctx.lineTo(-s / 4, -s / 2 - 11);
+  ctx.lineTo(0, -s / 2 + 4);
+  ctx.lineTo(s / 4, -s / 2 - 11);
+  ctx.lineTo(s / 2, -s / 2 + 6);
   ctx.closePath();
   ctx.fill();
 
@@ -373,9 +508,9 @@ function drawTrash(item) {
   ctx.lineWidth = 3;
   ctx.beginPath();
   ctx.moveTo(-s * 0.18, -s * 0.15);
-  ctx.lineTo(s * 0.18, s * 0.2);
+  ctx.lineTo(s * 0.18, s * 0.22);
   ctx.moveTo(s * 0.18, -s * 0.15);
-  ctx.lineTo(-s * 0.18, s * 0.2);
+  ctx.lineTo(-s * 0.18, s * 0.22);
   ctx.stroke();
 
   ctx.restore();
@@ -391,31 +526,31 @@ function drawBasket() {
 
   ctx.fillStyle = "#8a5328";
   ctx.strokeStyle = "#4f2f19";
-  ctx.lineWidth = 4;
+  ctx.lineWidth = 5;
 
   ctx.beginPath();
-  ctx.moveTo(x + 8, y + 8);
-  ctx.lineTo(x + w - 8, y + 8);
-  ctx.lineTo(x + w - 20, y + h);
-  ctx.lineTo(x + 20, y + h);
+  ctx.moveTo(x + 10, y + 10);
+  ctx.lineTo(x + w - 10, y + 10);
+  ctx.lineTo(x + w - 24, y + h);
+  ctx.lineTo(x + 24, y + h);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
 
-  ctx.strokeStyle = "rgba(255, 242, 216, 0.55)";
-  ctx.lineWidth = 2;
+  ctx.strokeStyle = "rgba(255, 238, 204, 0.62)";
+  ctx.lineWidth = 2.4;
 
-  for (let i = 18; i < w - 18; i += 18) {
+  for (let i = 22; i < w - 18; i += 19) {
     ctx.beginPath();
-    ctx.moveTo(x + i, y + 10);
-    ctx.lineTo(x + i - 8, y + h - 3);
+    ctx.moveTo(x + i, y + 13);
+    ctx.lineTo(x + i - 9, y + h - 4);
     ctx.stroke();
   }
 
   ctx.strokeStyle = "#4f2f19";
-  ctx.lineWidth = 5;
+  ctx.lineWidth = 6;
   ctx.beginPath();
-  ctx.arc(x + w / 2, y + 8, w * 0.36, Math.PI, Math.PI * 2);
+  ctx.arc(x + w / 2, y + 11, w * 0.36, Math.PI, Math.PI * 2);
   ctx.stroke();
 
   ctx.restore();
@@ -469,7 +604,7 @@ function handleTouchMove(event) {
   const touchX = (touch.clientX - rect.left) * scaleX;
 
   basket.x = touchX - basket.width / 2;
-  basket.x = clamp(basket.x, 10, canvas.width - basket.width - 10);
+  basket.x = clamp(basket.x, 12, canvas.width - basket.width - 12);
 
   if (!gameRunning && !gameOver) {
     drawStartScreen();

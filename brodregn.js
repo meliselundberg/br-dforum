@@ -580,57 +580,14 @@ function drawEmojiBread(item, emoji) {
 
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.font = item.size + "px Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif";
+
+  ctx.font =
+    item.size +
+    "px 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', emoji, sans-serif";
+
   ctx.fillText(emoji, 0, 0);
 
-  drawEmojiFace(item);
-
   ctx.restore();
-}
-
-function drawEmojiFace(item) {
-  const s = item.size;
-  const y = item.faceOffset || 0;
-
-  let faceY = y + s * 0.08;
-  let eyeGap = s * 0.16;
-  let eyeSize = s * 0.045;
-  let cheekX = s * 0.19;
-  let cheekY = faceY + s * 0.08;
-
-  if (item.breadType === 1) {
-    faceY = y + s * 0.04;
-    eyeGap = s * 0.14;
-    cheekX = s * 0.17;
-  }
-
-  if (item.breadType === 3) {
-    faceY = y + s * 0.14;
-    eyeGap = s * 0.13;
-    cheekX = s * 0.16;
-  }
-
-  ctx.fillStyle = "#5c2f19";
-
-  ctx.beginPath();
-  ctx.arc(-eyeGap, faceY - s * 0.04, eyeSize, 0, Math.PI * 2);
-  ctx.arc(eyeGap, faceY - s * 0.04, eyeSize, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.strokeStyle = "#5c2f19";
-  ctx.lineWidth = Math.max(2, s * 0.035);
-  ctx.lineCap = "round";
-
-  ctx.beginPath();
-  ctx.arc(0, faceY + s * 0.02, s * 0.13, 0.18, Math.PI - 0.18);
-  ctx.stroke();
-
-  ctx.fillStyle = "rgba(255, 112, 173, 0.72)";
-
-  ctx.beginPath();
-  ctx.arc(-cheekX, cheekY, s * 0.055, 0, Math.PI * 2);
-  ctx.arc(cheekX, cheekY, s * 0.055, 0, Math.PI * 2);
-  ctx.fill();
 }
 
 function drawRat(item) {
@@ -642,7 +599,11 @@ function drawRat(item) {
 
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.font = item.size + "px Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif";
+
+  ctx.font =
+    item.size +
+    "px 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', emoji, sans-serif";
+
   ctx.fillText("🐀", 0, 0);
 
   ctx.restore();

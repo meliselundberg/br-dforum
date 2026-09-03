@@ -26,6 +26,15 @@ let spawnTimer = 0;
 let lastTime = 0;
 let floatingDecor = [];
 
+const breadImages = [
+  loadImage("./br%C3%B6d1.png"),
+  loadImage("./br%C3%B6d2.png"),
+  loadImage("./br%C3%B6d3.png"),
+  loadImage("./br%C3%B6d4.png")
+];
+
+const ratImage = loadImage("./r%C3%A5tta.png");
+
 const basket = {
   x: GAME_WIDTH / 2 - 78,
   y: GAME_HEIGHT - 90,
@@ -33,6 +42,12 @@ const basket = {
   height: 64,
   speed: 920
 };
+
+function loadImage(src) {
+  const img = new Image();
+  img.src = src;
+  return img;
+}
 
 function resizeCanvas() {
   const dpr = window.devicePixelRatio || 1;
@@ -48,14 +63,6 @@ function resizeCanvas() {
   if (!gameRunning) {
     drawStartScreen();
   }
-}
-
-function gameWidth() {
-  return GAME_WIDTH;
-}
-
-function gameHeight() {
-  return GAME_HEIGHT;
 }
 
 function resetGame() {
@@ -165,7 +172,7 @@ function getRatChance() {
 
 function spawnItem() {
   const isRat = Math.random() < getRatChance();
-  const size = isRat ? random(42, 54) : random(42, 58);
+  const size = isRat ? random(46, 58) : random(38, 50);
 
   fallingItems.push({
     type: isRat ? "rat" : "bread",
@@ -175,8 +182,7 @@ function spawnItem() {
     speed: getFallSpeed(),
     rotation: random(-0.25, 0.25),
     rotationSpeed: random(-0.65, 0.65),
-    breadType: Math.floor(random(0, 4)),
-    faceOffset: random(-2, 2)
+    breadType: Math.floor(random(0, 4))
   });
 }
 
@@ -545,10 +551,10 @@ function drawGround() {
 
 function drawPreviewItems() {
   const previewItems = [
-    { x: 155, y: 205, size: 50, rotation: -0.15, breadType: 0, faceOffset: 0 },
-    { x: 740, y: 265, size: 50, rotation: 0.18, breadType: 1, faceOffset: 0 },
-    { x: 245, y: 420, size: 50, rotation: 0.14, breadType: 2, faceOffset: 0 },
-    { x: 665, y: 425, size: 52, rotation: -0.12, breadType: 3, faceOffset: 0 }
+    { x: 155, y: 205, size: 48, rotation: -0.15, breadType: 0 },
+    { x: 740, y: 265, size: 48, rotation: 0.18, breadType: 1 },
+    { x: 245, y: 420, size: 48, rotation: 0.14, breadType: 2 },
+    { x: 665, y: 425, size: 50, rotation: -0.12, breadType: 3 }
   ];
 
   previewItems.forEach(drawBread);
@@ -565,29 +571,38 @@ function drawFallingItems() {
 }
 
 function drawBread(item) {
-  const emojis = ["🍞", "🥖", "🥯", "🥐"];
-  const emoji = emojis[item.breadType] || "🍞";
+  const img = breadImages[item.breadType] || breadImages[0];
 
-  drawEmojiBread(item, emoji);
-}
-
-function drawEmojiBread(item, emoji) {
   ctx.save();
   ctx.translate(item.x, item.y);
   ctx.rotate(item.rotation);
 
   drawShadow(0, item.size * 0.45, item.size * 0.5, item.size * 0.14);
 
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-
-  ctx.font =
-    item.size +
-    "px 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', emoji, sans-serif";
-
-  ctx.fillText(emoji, 0, 0);
+  if (img.complete && img.naturalWidth > 0) {
+    ctx.drawImage(
+      img,
+      -item.size / 2,
+      -item.size / 2,
+      item.size,
+      item.size
+    );
+  } else {
+    drawFallbackBread(item.size);
+  }
 
   ctx.restore();
+}
+
+function drawFallbackBread(size) {
+  ctx.fillStyle = "#d99545";
+  ctx.strokeStyle = "#6c3f1d";
+  ctx.lineWidth = 3;
+
+  ctx.beginPath();
+  ctx.arc(0, 0, size * 0.42, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
 }
 
 function drawRat(item) {
@@ -597,14 +612,20 @@ function drawRat(item) {
 
   drawShadow(0, item.size * 0.44, item.size * 0.46, item.size * 0.13);
 
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-
-  ctx.font =
-    item.size +
-    "px 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', emoji, sans-serif";
-
-  ctx.fillText("🐀", 0, 0);
+  if (ratImage.complete && ratImage.naturalWidth > 0) {
+    ctx.drawImage(
+      ratImage,
+      -item.size / 2,
+      -item.size / 2,
+      item.size,
+      item.size
+    );
+  } else {
+    ctx.font = item.size + "px serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("🐀", 0, 0);
+  }
 
   ctx.restore();
 }

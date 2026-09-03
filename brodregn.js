@@ -277,7 +277,7 @@ function winGame() {
 
   showModal(
     "DU VANN!",
-    "-10 prickar\nVisa för läggarlaget."
+    "-10 prickar\nVisa för läggarlaget på rallydagen*\n\n*gäller bara en gång per lag"
   );
 }
 

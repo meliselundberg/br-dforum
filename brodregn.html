@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Brödregn | Brödnytt Forum</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="brodregn.css">
+</head>
+
+<body>
+  <header>
+    <div class="top">
+      <h1>BRÖDREGN</h1>
+      <div class="subtitle">Fånga 50 bröd. Undvik soporna.</div>
+    </div>
+  </header>
+
+  <div class="wrap single-page">
+    <main>
+      <div class="back" onclick="window.location.href='index.html'">← Tillbaka till forumet</div>
+
+      <section class="bread-game-card">
+        <div class="game-top">
+          <div>
+            <div class="game-label">Fångade bröd</div>
+            <div id="score" class="game-number">0 / 50</div>
+          </div>
+
+          <div>
+            <div class="game-label">Missade bröd</div>
+            <div id="misses" class="game-number">0 / 3</div>
+          </div>
+        </div>
+
+        <canvas id="gameCanvas" width="760" height="520"></canvas>
+
+        <div class="game-instructions">
+          <strong>Dator:</strong> styr med ← och →.
+          <br>
+          <strong>Mobil:</strong> dra korgen med fingret.
+          <br>
+          Missa 3 bröd = förlust. Fånga en sopa = direkt förlust.
+        </div>
+
+        <button id="startButton" class="game-button">Starta brödregnet</button>
+      </section>
+    </main>
+  </div>
+
+  <div id="gameModal" class="game-modal">
+    <div class="game-modal-box">
+      <div id="modalTitle" class="game-modal-title"></div>
+      <div id="modalText" class="game-modal-text"></div>
+      <button id="restartButton" class="game-button">Spela igen</button>
+      <button class="game-button secondary" onclick="window.location.href='index.html'">Tillbaka till forumet</button>
+    </div>
+  </div>
+
+  <script src="brodregn.js"></script>
+</body>
+</html>

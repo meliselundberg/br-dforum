@@ -27,13 +27,13 @@ let lastTime = 0;
 let floatingDecor = [];
 
 const breadImages = [
-  loadImage("./br%C3%B6d1.png"),
-  loadImage("./br%C3%B6d2.png"),
-  loadImage("./br%C3%B6d3.png"),
-  loadImage("./br%C3%B6d4.png")
+  loadImage("./brod1.png"),
+  loadImage("./brod2.png"),
+  loadImage("./brod3.png"),
+  loadImage("./brod4.png")
 ];
 
-const ratImage = loadImage("./r%C3%A5tta.png");
+const ratImage = loadImage("./ratta.png");
 
 const basket = {
   x: GAME_WIDTH / 2 - 78,

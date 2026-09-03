@@ -334,7 +334,7 @@ function drawStartScreen() {
 
   ctx.fillStyle = "#6b3b22";
   ctx.font = "900 25px Nunito, Arial";
-  ctx.fillText("Fånga 50 bröd. Undvik råttorna.", GAME_WIDTH / 2, 310);
+  ctx.fillText("Fånga 100 bröd. Undvik råttorna.", GAME_WIDTH / 2, 310);
 
   ctx.font = "800 18px Nunito, Arial";
   ctx.fillText("Tryck på startknappen för att börja.", GAME_WIDTH / 2, 340);

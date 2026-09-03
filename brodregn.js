@@ -156,7 +156,7 @@ function getFallSpeed() {
   return random(160, 235);
 }
 
-function getTrashChance() {
+function getRatChance() {
   if (score >= 40) return 0.23;
   if (score >= 25) return 0.19;
   if (score >= 10) return 0.15;
@@ -164,19 +164,19 @@ function getTrashChance() {
 }
 
 function spawnItem() {
-  const isTrash = Math.random() < getTrashChance();
-  const size = isTrash ? random(38, 50) : random(38, 54);
+  const isRat = Math.random() < getRatChance();
+  const size = isRat ? random(42, 54) : random(42, 58);
 
   fallingItems.push({
-    type: isTrash ? "trash" : "bread",
+    type: isRat ? "rat" : "bread",
     x: random(size, GAME_WIDTH - size),
     y: -70,
     size: size,
     speed: getFallSpeed(),
-    rotation: random(-0.45, 0.45),
-    rotationSpeed: random(-1.25, 1.25),
+    rotation: random(-0.25, 0.25),
+    rotationSpeed: random(-0.65, 0.65),
     breadType: Math.floor(random(0, 4)),
-    faceOffset: random(-3, 3)
+    faceOffset: random(-2, 2)
   });
 }
 
@@ -212,8 +212,8 @@ function checkCollisions() {
 
   for (const item of fallingItems) {
     if (isCaught(item)) {
-      if (item.type === "trash") {
-        loseGame("FÖRLUST!", "Du fångade en sopa.\nDet där var inte särskilt brödigt.");
+      if (item.type === "rat") {
+        loseGame("FÖRLUST!", "Du fångade en råtta.\nDet där hör inte hemma i brödkorgen.");
         return;
       }
 
@@ -315,7 +315,7 @@ function drawStartScreen() {
 
   ctx.fillStyle = "#6b3b22";
   ctx.font = "900 25px Nunito, Arial";
-  ctx.fillText("Fånga 50 bröd. Undvik soporna.", GAME_WIDTH / 2, 310);
+  ctx.fillText("Fånga 50 bröd. Undvik råttorna.", GAME_WIDTH / 2, 310);
 
   ctx.font = "800 18px Nunito, Arial";
   ctx.fillText("Tryck på startknappen för att börja.", GAME_WIDTH / 2, 340);
@@ -545,10 +545,10 @@ function drawGround() {
 
 function drawPreviewItems() {
   const previewItems = [
-    { x: 155, y: 205, size: 46, rotation: -0.25, breadType: 0, faceOffset: 0 },
-    { x: 740, y: 265, size: 44, rotation: 0.38, breadType: 1, faceOffset: 0 },
-    { x: 245, y: 420, size: 42, rotation: 0.2, breadType: 2, faceOffset: 0 },
-    { x: 665, y: 425, size: 50, rotation: -0.15, breadType: 3, faceOffset: 0 }
+    { x: 155, y: 205, size: 50, rotation: -0.15, breadType: 0, faceOffset: 0 },
+    { x: 740, y: 265, size: 50, rotation: 0.18, breadType: 1, faceOffset: 0 },
+    { x: 245, y: 420, size: 50, rotation: 0.14, breadType: 2, faceOffset: 0 },
+    { x: 665, y: 425, size: 52, rotation: -0.12, breadType: 3, faceOffset: 0 }
   ];
 
   previewItems.forEach(drawBread);
@@ -559,222 +559,91 @@ function drawFallingItems() {
     if (item.type === "bread") {
       drawBread(item);
     } else {
-      drawTrash(item);
+      drawRat(item);
     }
   }
 }
 
 function drawBread(item) {
+  const emojis = ["🍞", "🥖", "🥯", "🥐"];
+  const emoji = emojis[item.breadType] || "🍞";
+
+  drawEmojiBread(item, emoji);
+}
+
+function drawEmojiBread(item, emoji) {
+  ctx.save();
+  ctx.translate(item.x, item.y);
+  ctx.rotate(item.rotation);
+
+  drawShadow(0, item.size * 0.45, item.size * 0.5, item.size * 0.14);
+
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.font = item.size + "px Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif";
+  ctx.fillText(emoji, 0, 0);
+
+  drawEmojiFace(item);
+
+  ctx.restore();
+}
+
+function drawEmojiFace(item) {
+  const s = item.size;
+  const y = item.faceOffset || 0;
+
+  let faceY = y + s * 0.08;
+  let eyeGap = s * 0.16;
+  let eyeSize = s * 0.045;
+  let cheekX = s * 0.19;
+  let cheekY = faceY + s * 0.08;
+
   if (item.breadType === 1) {
-    drawBaguette(item);
-  } else if (item.breadType === 2) {
-    drawBun(item);
-  } else if (item.breadType === 3) {
-    drawCroissant(item);
-  } else {
-    drawLoaf(item);
-  }
-}
-
-function drawLoaf(item) {
-  ctx.save();
-  ctx.translate(item.x, item.y);
-  ctx.rotate(item.rotation);
-
-  const w = item.size * 1.45;
-  const h = item.size * 0.88;
-
-  drawShadow(0, h * 0.38, w * 0.5, h * 0.2);
-
-  ctx.fillStyle = "#d99545";
-  ctx.strokeStyle = "#6c3f1d";
-  ctx.lineWidth = 3.5;
-
-  roundedRect(-w / 2, -h / 2, w, h, h / 2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = "rgba(255, 229, 183, 0.58)";
-  roundedRect(-w * 0.34, -h * 0.34, w * 0.68, h * 0.24, h * 0.12);
-  ctx.fill();
-
-  ctx.strokeStyle = "#fff2d2";
-  ctx.lineWidth = 3;
-
-  for (let i = -1; i <= 1; i++) {
-    ctx.beginPath();
-    ctx.moveTo(i * 14 - 8, -h / 4);
-    ctx.quadraticCurveTo(i * 14, 0, i * 14 - 8, h / 4);
-    ctx.stroke();
+    faceY = y + s * 0.04;
+    eyeGap = s * 0.14;
+    cheekX = s * 0.17;
   }
 
-  drawCuteFace(0, 3 + item.faceOffset, item.size * 0.22);
-
-  ctx.restore();
-}
-
-function drawBaguette(item) {
-  ctx.save();
-  ctx.translate(item.x, item.y);
-  ctx.rotate(item.rotation);
-
-  const w = item.size * 1.9;
-  const h = item.size * 0.5;
-
-  drawShadow(0, h * 0.45, w * 0.46, h * 0.22);
-
-  ctx.fillStyle = "#d89b4d";
-  ctx.strokeStyle = "#6c3f1d";
-  ctx.lineWidth = 3.5;
-
-  roundedRect(-w / 2, -h / 2, w, h, h / 2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.strokeStyle = "#fff2d2";
-  ctx.lineWidth = 3;
-
-  for (let i = -1; i <= 1; i++) {
-    ctx.beginPath();
-    ctx.moveTo(i * 20 - 10, -h * 0.25);
-    ctx.lineTo(i * 20 + 8, h * 0.22);
-    ctx.stroke();
+  if (item.breadType === 3) {
+    faceY = y + s * 0.14;
+    eyeGap = s * 0.13;
+    cheekX = s * 0.16;
   }
-
-  drawCuteFace(0, 2 + item.faceOffset, item.size * 0.18);
-
-  ctx.restore();
-}
-
-function drawBun(item) {
-  ctx.save();
-  ctx.translate(item.x, item.y);
-  ctx.rotate(item.rotation);
-
-  const s = item.size;
-
-  drawShadow(0, s * 0.28, s * 0.45, s * 0.14);
-
-  ctx.fillStyle = "#da9d4c";
-  ctx.strokeStyle = "#6c3f1d";
-  ctx.lineWidth = 3.5;
-
-  ctx.beginPath();
-  ctx.arc(0, 0, s * 0.52, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.strokeStyle = "#fff2d2";
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.arc(0, 0, s * 0.27, 0.25, Math.PI * 1.75);
-  ctx.stroke();
-
-  drawCuteFace(0, 4 + item.faceOffset, item.size * 0.22);
-
-  ctx.restore();
-}
-
-function drawCroissant(item) {
-  ctx.save();
-  ctx.translate(item.x, item.y);
-  ctx.rotate(item.rotation);
-
-  const s = item.size;
-
-  drawShadow(0, s * 0.3, s * 0.45, s * 0.14);
-
-  ctx.fillStyle = "#dca04a";
-  ctx.strokeStyle = "#6c3f1d";
-  ctx.lineWidth = 3.5;
-
-  ctx.beginPath();
-  ctx.arc(0, 2, s * 0.58, 0.15 * Math.PI, 0.85 * Math.PI, false);
-  ctx.arc(0, 2, s * 0.31, 0.85 * Math.PI, 0.15 * Math.PI, true);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.strokeStyle = "rgba(255, 242, 210, 0.8)";
-  ctx.lineWidth = 2.4;
-  ctx.beginPath();
-  ctx.arc(-12, 2, s * 0.28, 0.2 * Math.PI, 0.72 * Math.PI);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(12, 2, s * 0.28, 0.28 * Math.PI, 0.8 * Math.PI);
-  ctx.stroke();
-
-  drawCuteFace(0, 8 + item.faceOffset, item.size * 0.17);
-
-  ctx.restore();
-}
-
-function drawCuteFace(x, y, scale) {
-  ctx.save();
-  ctx.translate(x, y);
 
   ctx.fillStyle = "#5c2f19";
 
   ctx.beginPath();
-  ctx.arc(-scale, -scale * 0.25, scale * 0.22, 0, Math.PI * 2);
-  ctx.arc(scale, -scale * 0.25, scale * 0.22, 0, Math.PI * 2);
+  ctx.arc(-eyeGap, faceY - s * 0.04, eyeSize, 0, Math.PI * 2);
+  ctx.arc(eyeGap, faceY - s * 0.04, eyeSize, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.strokeStyle = "#5c2f19";
-  ctx.lineWidth = Math.max(1.5, scale * 0.13);
+  ctx.lineWidth = Math.max(2, s * 0.035);
+  ctx.lineCap = "round";
+
   ctx.beginPath();
-  ctx.arc(0, scale * 0.1, scale * 0.5, 0.15, Math.PI - 0.15);
+  ctx.arc(0, faceY + s * 0.02, s * 0.13, 0.18, Math.PI - 0.18);
   ctx.stroke();
 
-  ctx.fillStyle = "rgba(255, 112, 173, 0.55)";
-  ctx.beginPath();
-  ctx.arc(-scale * 1.55, scale * 0.1, scale * 0.28, 0, Math.PI * 2);
-  ctx.arc(scale * 1.55, scale * 0.1, scale * 0.28, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.fillStyle = "rgba(255, 112, 173, 0.72)";
 
-  ctx.restore();
+  ctx.beginPath();
+  ctx.arc(-cheekX, cheekY, s * 0.055, 0, Math.PI * 2);
+  ctx.arc(cheekX, cheekY, s * 0.055, 0, Math.PI * 2);
+  ctx.fill();
 }
 
-function drawTrash(item) {
+function drawRat(item) {
   ctx.save();
   ctx.translate(item.x, item.y);
   ctx.rotate(item.rotation);
 
-  const s = item.size;
+  drawShadow(0, item.size * 0.44, item.size * 0.46, item.size * 0.13);
 
-  drawShadow(0, s * 0.34, s * 0.42, s * 0.16);
-
-  ctx.fillStyle = "#3f3831";
-  ctx.strokeStyle = "#211a15";
-  ctx.lineWidth = 3.5;
-
-  roundedRect(-s / 2, -s / 2, s, s * 1.1, 10);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = "#2b2520";
-  ctx.beginPath();
-  ctx.moveTo(-s / 2, -s / 2 + 6);
-  ctx.lineTo(-s / 4, -s / 2 - 12);
-  ctx.lineTo(0, -s / 2 + 4);
-  ctx.lineTo(s / 4, -s / 2 - 12);
-  ctx.lineTo(s / 2, -s / 2 + 6);
-  ctx.closePath();
-  ctx.fill();
-
-  ctx.strokeStyle = "#fff7ea";
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.moveTo(-s * 0.2, -s * 0.13);
-  ctx.lineTo(s * 0.2, s * 0.22);
-  ctx.moveTo(s * 0.2, -s * 0.13);
-  ctx.lineTo(-s * 0.2, s * 0.22);
-  ctx.stroke();
-
-  ctx.fillStyle = "#90c978";
-  ctx.beginPath();
-  ctx.arc(s * 0.3, -s * 0.22, s * 0.13, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.font = item.size + "px Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif";
+  ctx.fillText("🐀", 0, 0);
 
   ctx.restore();
 }

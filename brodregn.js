@@ -34,12 +34,13 @@ const breadImages = [
 ];
 
 const ratImage = loadImage("./ratta.png");
+const basketImage = loadImage("./korg.png");
 
 const basket = {
-  x: GAME_WIDTH / 2 - 78,
-  y: GAME_HEIGHT - 90,
-  width: 156,
-  height: 64,
+  x: GAME_WIDTH / 2 - 90,
+  y: GAME_HEIGHT - 100,
+  width: 180,
+  height: 78,
   speed: 920
 };
 
@@ -239,15 +240,27 @@ function checkCollisions() {
 }
 
 function isCaught(item) {
-  const itemLeft = item.x - item.size / 2;
-  const itemRight = item.x + item.size / 2;
-  const itemTop = item.y - item.size / 2;
-  const itemBottom = item.y + item.size / 2;
+  let itemLeft;
+  let itemRight;
+  let itemTop;
+  let itemBottom;
 
-  const basketLeft = basket.x + 8;
-  const basketRight = basket.x + basket.width - 8;
-  const basketTop = basket.y + 12;
-  const basketBottom = basket.y + basket.height;
+  if (item.type === "rat") {
+    itemLeft = item.x - item.size * 0.28;
+    itemRight = item.x + item.size * 0.28;
+    itemTop = item.y - item.size * 0.26;
+    itemBottom = item.y + item.size * 0.26;
+  } else {
+    itemLeft = item.x - item.size * 0.42;
+    itemRight = item.x + item.size * 0.42;
+    itemTop = item.y - item.size * 0.42;
+    itemBottom = item.y + item.size * 0.42;
+  }
+
+  const basketLeft = basket.x + basket.width * 0.14;
+  const basketRight = basket.x + basket.width * 0.86;
+  const basketTop = basket.y + basket.height * 0.2;
+  const basketBottom = basket.y + basket.height * 0.92;
 
   return (
     itemRight > basketLeft &&
@@ -651,41 +664,38 @@ function drawBasket() {
 
   drawShadow(x + w / 2, y + h + 8, w * 0.52, 12);
 
-  ctx.fillStyle = "#9a5f2f";
-  ctx.strokeStyle = "#4f2f19";
-  ctx.lineWidth = 5;
+  if (basketImage.complete && basketImage.naturalWidth > 0) {
+    const ratio = basketImage.naturalWidth / basketImage.naturalHeight;
 
-  ctx.beginPath();
-  ctx.moveTo(x + 12, y + 12);
-  ctx.quadraticCurveTo(x + w / 2, y + 0, x + w - 12, y + 12);
-  ctx.lineTo(x + w - 28, y + h);
-  ctx.quadraticCurveTo(x + w / 2, y + h + 10, x + 28, y + h);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
+    let drawWidth = w;
+    let drawHeight = w / ratio;
 
-  ctx.strokeStyle = "rgba(255, 236, 202, 0.66)";
-  ctx.lineWidth = 2.5;
+    if (drawHeight > h * 1.35) {
+      drawHeight = h * 1.35;
+      drawWidth = drawHeight * ratio;
+    }
 
-  for (let i = 24; i < w - 18; i += 20) {
+    ctx.drawImage(
+      basketImage,
+      x + w / 2 - drawWidth / 2,
+      y + h / 2 - drawHeight / 2,
+      drawWidth,
+      drawHeight
+    );
+  } else {
+    ctx.fillStyle = "#9a5f2f";
+    ctx.strokeStyle = "#4f2f19";
+    ctx.lineWidth = 5;
+
     ctx.beginPath();
-    ctx.moveTo(x + i, y + 15);
-    ctx.lineTo(x + i - 10, y + h - 3);
+    ctx.moveTo(x + 12, y + 12);
+    ctx.quadraticCurveTo(x + w / 2, y + 0, x + w - 12, y + 12);
+    ctx.lineTo(x + w - 28, y + h);
+    ctx.quadraticCurveTo(x + w / 2, y + h + 10, x + 28, y + h);
+    ctx.closePath();
+    ctx.fill();
     ctx.stroke();
   }
-
-  for (let j = 22; j < h - 4; j += 17) {
-    ctx.beginPath();
-    ctx.moveTo(x + 22, y + j);
-    ctx.lineTo(x + w - 22, y + j - 4);
-    ctx.stroke();
-  }
-
-  ctx.strokeStyle = "#4f2f19";
-  ctx.lineWidth = 7;
-  ctx.beginPath();
-  ctx.arc(x + w / 2, y + 14, w * 0.35, Math.PI, Math.PI * 2);
-  ctx.stroke();
 
   ctx.restore();
 }

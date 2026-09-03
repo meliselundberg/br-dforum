@@ -190,7 +190,7 @@ function makeGridAvatar(pattern, color) {
 }
 
 function initAvatars() {
-  document.querySelectorAll("img.avatar, img.profile-avatar").forEach(function(img) {
+  document.querySelectorAll("img.avatar").forEach(function(img) {
     const pattern = img.dataset.pattern;
     const seed = img.dataset.seed;
     const color = img.dataset.color || colorFromSeed(seed || "default");

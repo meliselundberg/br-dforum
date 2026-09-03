@@ -389,12 +389,10 @@ function renderProfilePage(orderText) {
       <div class="profile-hero">
         <div class="profile-hero-inner">
           <img
-            class="profile-avatar"
-            data-pattern="111100"
-            data-seed="broderanneli3"
-            alt=""
+            class="profile-avatar profile-photo"
+            src="yeastpb.png"
+            alt="Bröder Yeast Mode"
           >
-
           <div>
             <h2 class="profile-name">broderanneli</h2>
             <div class="profile-meta">Medlem sedan 2024 · Bullbeställare · Gillar croissanter</div>

@@ -9,6 +9,9 @@ const modal = document.getElementById("gameModal");
 const modalTitle = document.getElementById("modalTitle");
 const modalText = document.getElementById("modalText");
 
+const GAME_WIDTH = 900;
+const GAME_HEIGHT = 640;
+
 const winningScore = 50;
 const maxMisses = 3;
 
@@ -24,28 +27,23 @@ let lastTime = 0;
 let floatingDecor = [];
 
 const basket = {
-  x: 0,
-  y: 0,
+  x: GAME_WIDTH / 2 - 78,
+  y: GAME_HEIGHT - 90,
   width: 156,
   height: 64,
   speed: 920
 };
 
 function resizeCanvas() {
-  const rect = canvas.getBoundingClientRect();
   const dpr = window.devicePixelRatio || 1;
 
-  canvas.width = Math.round(rect.width * dpr);
-  canvas.height = Math.round(rect.height * dpr);
+  canvas.width = GAME_WIDTH * dpr;
+  canvas.height = GAME_HEIGHT * dpr;
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  basket.width = Math.min(156, rect.width * 0.24);
-  basket.height = basket.width * 0.42;
-  basket.y = rect.height - basket.height - 26;
-  basket.x = clamp(basket.x, 14, rect.width - basket.width - 14);
-
-  createFloatingDecor();
+  basket.y = GAME_HEIGHT - basket.height - 28;
+  basket.x = clamp(basket.x, 14, GAME_WIDTH - basket.width - 14);
 
   if (!gameRunning) {
     drawStartScreen();
@@ -53,11 +51,11 @@ function resizeCanvas() {
 }
 
 function gameWidth() {
-  return canvas.getBoundingClientRect().width;
+  return GAME_WIDTH;
 }
 
 function gameHeight() {
-  return canvas.getBoundingClientRect().height;
+  return GAME_HEIGHT;
 }
 
 function resetGame() {
@@ -69,8 +67,9 @@ function resetGame() {
   spawnTimer = 0;
   lastTime = 0;
 
-  basket.x = gameWidth() / 2 - basket.width / 2;
+  basket.x = GAME_WIDTH / 2 - basket.width / 2;
 
+  createFloatingDecor();
   updateStats();
   hideModal();
   startButton.style.display = "inline-flex";
@@ -86,7 +85,7 @@ function startGame() {
   spawnTimer = 0;
   lastTime = performance.now();
 
-  basket.x = gameWidth() / 2 - basket.width / 2;
+  basket.x = GAME_WIDTH / 2 - basket.width / 2;
 
   updateStats();
   hideModal();
@@ -131,7 +130,7 @@ function updateBasket(delta) {
     basket.x += basket.speed * delta;
   }
 
-  basket.x = clamp(basket.x, 14, gameWidth() - basket.width - 14);
+  basket.x = clamp(basket.x, 14, GAME_WIDTH - basket.width - 14);
 }
 
 function updateSpawning(delta) {
@@ -151,13 +150,10 @@ function getSpawnRate() {
 }
 
 function getFallSpeed() {
-  const h = gameHeight();
-  const base = h / 4.2;
-
-  if (score >= 40) return random(base * 1.45, base * 1.8);
-  if (score >= 25) return random(base * 1.22, base * 1.58);
-  if (score >= 10) return random(base * 1.0, base * 1.35);
-  return random(base * 0.84, base * 1.12);
+  if (score >= 40) return random(300, 390);
+  if (score >= 25) return random(245, 330);
+  if (score >= 10) return random(200, 280);
+  return random(160, 235);
 }
 
 function getTrashChance() {
@@ -169,13 +165,11 @@ function getTrashChance() {
 
 function spawnItem() {
   const isTrash = Math.random() < getTrashChance();
-  const size = isTrash
-    ? random(40, 54)
-    : random(42, 60);
+  const size = isTrash ? random(38, 50) : random(38, 54);
 
   fallingItems.push({
     type: isTrash ? "trash" : "bread",
-    x: random(size, gameWidth() - size),
+    x: random(size, GAME_WIDTH - size),
     y: -70,
     size: size,
     speed: getFallSpeed(),
@@ -195,7 +189,7 @@ function updateItems(delta) {
   const remainingItems = [];
 
   for (const item of fallingItems) {
-    if (item.y - item.size > gameHeight()) {
+    if (item.y - item.size > GAME_HEIGHT) {
       if (item.type === "bread") {
         misses++;
         updateStats();
@@ -302,58 +296,73 @@ function drawStartScreen() {
   drawGround();
   drawBasket();
 
-  const w = gameWidth();
-  const h = gameHeight();
-
   ctx.save();
   ctx.textAlign = "center";
 
   drawRoundedPanel(
-    w / 2 - Math.min(290, w * 0.43),
-    h * 0.32,
-    Math.min(580, w * 0.86),
-    158,
-    30,
+    GAME_WIDTH / 2 - 305,
+    195,
+    610,
+    170,
+    38,
     "rgba(255, 255, 255, 0.72)",
-    "rgba(127, 38, 29, 0.13)"
+    "rgba(116, 53, 31, 0.12)"
   );
 
-  ctx.fillStyle = "#7f261d";
-  ctx.font = "700 " + Math.min(78, w * 0.115) + "px Georgia";
-  ctx.fillText("BRÖDREGN", w / 2, h * 0.32 + 65);
+  ctx.fillStyle = "#7f2f1d";
+  ctx.font = "800 86px 'Baloo 2', Arial";
+  ctx.fillText("BRÖDREGN", GAME_WIDTH / 2, 265);
 
-  ctx.fillStyle = "#6b4127";
-  ctx.font = "900 " + Math.min(24, w * 0.038) + "px Arial";
-  ctx.fillText("Fånga 50 bröd. Undvik soporna.", w / 2, h * 0.32 + 108);
+  ctx.fillStyle = "#6b3b22";
+  ctx.font = "900 25px Nunito, Arial";
+  ctx.fillText("Fånga 50 bröd. Undvik soporna.", GAME_WIDTH / 2, 310);
 
-  ctx.font = "700 " + Math.min(17, w * 0.03) + "px Arial";
-  ctx.fillText("Tryck på startknappen för att börja.", w / 2, h * 0.32 + 136);
+  ctx.font = "800 18px Nunito, Arial";
+  ctx.fillText("Tryck på startknappen för att börja.", GAME_WIDTH / 2, 340);
 
   ctx.restore();
 }
 
 function clearCanvas() {
-  ctx.clearRect(0, 0, gameWidth(), gameHeight());
+  ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 }
 
 function drawBackground() {
-  const w = gameWidth();
-  const h = gameHeight();
-
-  const sky = ctx.createLinearGradient(0, 0, 0, h);
-  sky.addColorStop(0, "#9cecff");
-  sky.addColorStop(0.44, "#fff0b8");
+  const sky = ctx.createLinearGradient(0, 0, 0, GAME_HEIGHT);
+  sky.addColorStop(0, "#9eeeff");
+  sky.addColorStop(0.36, "#c9f5ff");
+  sky.addColorStop(0.62, "#fff1ba");
   sky.addColorStop(1, "#ffbd78");
 
   ctx.fillStyle = sky;
-  ctx.fillRect(0, 0, w, h);
+  ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
-  drawSun(w - 88, 92, Math.min(1, w / 650));
-  drawCloud(w * 0.16, 118, Math.min(1.1, w / 620));
-  drawCloud(w * 0.78, 158, Math.min(0.9, w / 650));
-  drawCloud(w * 0.48, 75, Math.min(0.7, w / 720));
+  drawSun(785, 96, 1);
+  drawCloud(125, 118, 1.12);
+  drawCloud(710, 158, 0.9);
+  drawCloud(430, 78, 0.72);
+
+  drawRainbow();
   drawHills();
   drawTinySparkles();
+}
+
+function drawRainbow() {
+  ctx.save();
+  ctx.globalAlpha = 0.42;
+  ctx.lineWidth = 13;
+  ctx.lineCap = "round";
+
+  const colors = ["#ff9ec5", "#ffd16f", "#fff4a8", "#8ee7be", "#8fd8ff"];
+
+  colors.forEach(function(color, index) {
+    ctx.strokeStyle = color;
+    ctx.beginPath();
+    ctx.arc(110, 405, 240 + index * 18, Math.PI * 1.08, Math.PI * 1.72);
+    ctx.stroke();
+  });
+
+  ctx.restore();
 }
 
 function drawSun(x, y, scale) {
@@ -374,13 +383,13 @@ function drawSun(x, y, scale) {
   ctx.fill();
   ctx.stroke();
 
-  ctx.fillStyle = "#7f261d";
+  ctx.fillStyle = "#7f2f1d";
   ctx.beginPath();
   ctx.arc(-13, -6, 4, 0, Math.PI * 2);
   ctx.arc(13, -6, 4, 0, Math.PI * 2);
   ctx.fill();
 
-  ctx.strokeStyle = "#7f261d";
+  ctx.strokeStyle = "#7f2f1d";
   ctx.lineWidth = 3;
   ctx.beginPath();
   ctx.arc(0, 5, 16, 0.15, Math.PI - 0.15);
@@ -394,7 +403,7 @@ function drawCloud(x, y, scale) {
   ctx.translate(x, y);
   ctx.scale(scale, scale);
 
-  ctx.fillStyle = "rgba(255, 255, 255, 0.78)";
+  ctx.fillStyle = "rgba(255, 255, 255, 0.82)";
   ctx.strokeStyle = "rgba(126, 63, 31, 0.09)";
   ctx.lineWidth = 3;
 
@@ -410,28 +419,25 @@ function drawCloud(x, y, scale) {
 }
 
 function drawHills() {
-  const w = gameWidth();
-  const h = gameHeight();
-
   ctx.save();
 
-  ctx.fillStyle = "rgba(255, 154, 191, 0.25)";
+  ctx.fillStyle = "rgba(255, 154, 191, 0.28)";
   ctx.beginPath();
-  ctx.moveTo(0, h * 0.78);
-  ctx.quadraticCurveTo(w * 0.22, h * 0.66, w * 0.48, h * 0.78);
-  ctx.quadraticCurveTo(w * 0.75, h * 0.9, w, h * 0.75);
-  ctx.lineTo(w, h);
-  ctx.lineTo(0, h);
+  ctx.moveTo(0, GAME_HEIGHT * 0.78);
+  ctx.quadraticCurveTo(GAME_WIDTH * 0.22, GAME_HEIGHT * 0.66, GAME_WIDTH * 0.48, GAME_HEIGHT * 0.78);
+  ctx.quadraticCurveTo(GAME_WIDTH * 0.75, GAME_HEIGHT * 0.9, GAME_WIDTH, GAME_HEIGHT * 0.75);
+  ctx.lineTo(GAME_WIDTH, GAME_HEIGHT);
+  ctx.lineTo(0, GAME_HEIGHT);
   ctx.closePath();
   ctx.fill();
 
   ctx.fillStyle = "rgba(196, 145, 69, 0.22)";
   ctx.beginPath();
-  ctx.moveTo(0, h * 0.84);
-  ctx.quadraticCurveTo(w * 0.36, h * 0.7, w * 0.68, h * 0.86);
-  ctx.quadraticCurveTo(w * 0.86, h * 0.95, w, h * 0.82);
-  ctx.lineTo(w, h);
-  ctx.lineTo(0, h);
+  ctx.moveTo(0, GAME_HEIGHT * 0.84);
+  ctx.quadraticCurveTo(GAME_WIDTH * 0.36, GAME_HEIGHT * 0.7, GAME_WIDTH * 0.68, GAME_HEIGHT * 0.86);
+  ctx.quadraticCurveTo(GAME_WIDTH * 0.86, GAME_HEIGHT * 0.95, GAME_WIDTH, GAME_HEIGHT * 0.82);
+  ctx.lineTo(GAME_WIDTH, GAME_HEIGHT);
+  ctx.lineTo(0, GAME_HEIGHT);
   ctx.closePath();
   ctx.fill();
 
@@ -439,24 +445,21 @@ function drawHills() {
 }
 
 function drawTinySparkles() {
-  const w = gameWidth();
-  const h = gameHeight();
-
   ctx.save();
 
-  for (let i = 0; i < 28; i++) {
-    const x = (i * 129 + 43) % w;
-    const y = ((i * 71 + 29) % (h * 0.62)) + 40;
+  for (let i = 0; i < 34; i++) {
+    const x = (i * 129 + 43) % GAME_WIDTH;
+    const y = ((i * 71 + 29) % 410) + 38;
 
     ctx.fillStyle = i % 2 === 0
-      ? "rgba(255, 154, 191, 0.42)"
-      : "rgba(255, 255, 255, 0.54)";
+      ? "rgba(255, 112, 173, 0.42)"
+      : "rgba(255, 255, 255, 0.58)";
 
     ctx.beginPath();
-    ctx.moveTo(x, y - 5);
-    ctx.lineTo(x + 4, y);
-    ctx.lineTo(x, y + 5);
-    ctx.lineTo(x - 4, y);
+    ctx.moveTo(x, y - 6);
+    ctx.lineTo(x + 5, y);
+    ctx.lineTo(x, y + 6);
+    ctx.lineTo(x - 5, y);
     ctx.closePath();
     ctx.fill();
   }
@@ -467,13 +470,13 @@ function drawTinySparkles() {
 function createFloatingDecor() {
   floatingDecor = [];
 
-  for (let i = 0; i < 18; i++) {
+  for (let i = 0; i < 22; i++) {
     floatingDecor.push({
-      x: random(20, Math.max(40, gameWidth() - 20)),
-      y: random(60, Math.max(120, gameHeight() - 130)),
-      size: random(4, 10),
-      speed: random(6, 16),
-      type: i % 3
+      x: random(28, GAME_WIDTH - 28),
+      y: random(70, GAME_HEIGHT - 130),
+      size: random(4, 11),
+      speed: random(7, 17),
+      type: i % 4
     });
   }
 }
@@ -482,9 +485,9 @@ function updateDecor(delta) {
   for (const decor of floatingDecor) {
     decor.y += decor.speed * delta;
 
-    if (decor.y > gameHeight() - 90) {
-      decor.y = 40;
-      decor.x = random(20, gameWidth() - 20);
+    if (decor.y > GAME_HEIGHT - 88) {
+      decor.y = 42;
+      decor.x = random(28, GAME_WIDTH - 28);
     }
   }
 }
@@ -494,21 +497,26 @@ function drawFloatingDecor() {
 
   for (const decor of floatingDecor) {
     if (decor.type === 0) {
-      ctx.fillStyle = "rgba(127, 38, 29, 0.15)";
+      ctx.fillStyle = "rgba(127, 47, 29, 0.14)";
       ctx.beginPath();
       ctx.arc(decor.x, decor.y, decor.size, 0, Math.PI * 2);
       ctx.fill();
     } else if (decor.type === 1) {
-      ctx.fillStyle = "rgba(255, 154, 191, 0.32)";
+      ctx.fillStyle = "rgba(255, 112, 173, 0.34)";
       drawHeart(decor.x, decor.y, decor.size);
-    } else {
-      ctx.fillStyle = "rgba(255, 255, 255, 0.44)";
+    } else if (decor.type === 2) {
+      ctx.fillStyle = "rgba(255, 255, 255, 0.48)";
       ctx.beginPath();
       ctx.moveTo(decor.x, decor.y - decor.size);
       ctx.lineTo(decor.x + decor.size, decor.y);
       ctx.lineTo(decor.x, decor.y + decor.size);
       ctx.lineTo(decor.x - decor.size, decor.y);
       ctx.closePath();
+      ctx.fill();
+    } else {
+      ctx.fillStyle = "rgba(255, 213, 95, 0.34)";
+      ctx.beginPath();
+      ctx.arc(decor.x, decor.y, decor.size * 0.8, 0, Math.PI * 2);
       ctx.fill();
     }
   }
@@ -525,26 +533,22 @@ function drawHeart(x, y, size) {
 }
 
 function drawGround() {
-  const w = gameWidth();
-  const h = gameHeight();
-
   ctx.save();
+
   ctx.fillStyle = "rgba(126, 63, 31, 0.08)";
   ctx.beginPath();
-  ctx.ellipse(w / 2, h + 18, w * 0.62, 82, 0, 0, Math.PI * 2);
+  ctx.ellipse(GAME_WIDTH / 2, GAME_HEIGHT + 18, GAME_WIDTH * 0.62, 82, 0, 0, Math.PI * 2);
   ctx.fill();
+
   ctx.restore();
 }
 
 function drawPreviewItems() {
-  const w = gameWidth();
-  const h = gameHeight();
-
   const previewItems = [
-    { x: w * 0.17, y: h * 0.26, size: 48, rotation: -0.25, breadType: 0, faceOffset: 0 },
-    { x: w * 0.82, y: h * 0.34, size: 46, rotation: 0.38, breadType: 1, faceOffset: 0 },
-    { x: w * 0.26, y: h * 0.66, size: 44, rotation: 0.2, breadType: 2, faceOffset: 0 },
-    { x: w * 0.74, y: h * 0.67, size: 52, rotation: -0.15, breadType: 3, faceOffset: 0 }
+    { x: 155, y: 205, size: 46, rotation: -0.25, breadType: 0, faceOffset: 0 },
+    { x: 740, y: 265, size: 44, rotation: 0.38, breadType: 1, faceOffset: 0 },
+    { x: 245, y: 420, size: 42, rotation: 0.2, breadType: 2, faceOffset: 0 },
+    { x: 665, y: 425, size: 50, rotation: -0.15, breadType: 3, faceOffset: 0 }
   ];
 
   previewItems.forEach(drawBread);
@@ -580,7 +584,7 @@ function drawLoaf(item) {
   const w = item.size * 1.45;
   const h = item.size * 0.88;
 
-  drawShadow(0, h * 0.35, w * 0.5, h * 0.2);
+  drawShadow(0, h * 0.38, w * 0.5, h * 0.2);
 
   ctx.fillStyle = "#d99545";
   ctx.strokeStyle = "#6c3f1d";
@@ -649,7 +653,7 @@ function drawBun(item) {
 
   const s = item.size;
 
-  drawShadow(0, s * 0.25, s * 0.45, s * 0.14);
+  drawShadow(0, s * 0.28, s * 0.45, s * 0.14);
 
   ctx.fillStyle = "#da9d4c";
   ctx.strokeStyle = "#6c3f1d";
@@ -678,7 +682,7 @@ function drawCroissant(item) {
 
   const s = item.size;
 
-  drawShadow(0, s * 0.28, s * 0.45, s * 0.14);
+  drawShadow(0, s * 0.3, s * 0.45, s * 0.14);
 
   ctx.fillStyle = "#dca04a";
   ctx.strokeStyle = "#6c3f1d";
@@ -722,7 +726,7 @@ function drawCuteFace(x, y, scale) {
   ctx.arc(0, scale * 0.1, scale * 0.5, 0.15, Math.PI - 0.15);
   ctx.stroke();
 
-  ctx.fillStyle = "rgba(255, 154, 191, 0.55)";
+  ctx.fillStyle = "rgba(255, 112, 173, 0.55)";
   ctx.beginPath();
   ctx.arc(-scale * 1.55, scale * 0.1, scale * 0.28, 0, Math.PI * 2);
   ctx.arc(scale * 1.55, scale * 0.1, scale * 0.28, 0, Math.PI * 2);
@@ -837,7 +841,7 @@ function drawRoundedPanel(x, y, width, height, radius, fill, stroke) {
   ctx.save();
   ctx.fillStyle = fill;
   ctx.strokeStyle = stroke;
-  ctx.lineWidth = 3;
+  ctx.lineWidth = 4;
   roundedRect(x, y, width, height, radius);
   ctx.fill();
   ctx.stroke();
@@ -887,10 +891,12 @@ function handleTouchMove(event) {
 
   const touch = event.touches[0];
   const rect = canvas.getBoundingClientRect();
-  const touchX = touch.clientX - rect.left;
+
+  const scaleX = GAME_WIDTH / rect.width;
+  const touchX = (touch.clientX - rect.left) * scaleX;
 
   basket.x = touchX - basket.width / 2;
-  basket.x = clamp(basket.x, 14, gameWidth() - basket.width - 14);
+  basket.x = clamp(basket.x, 14, GAME_WIDTH - basket.width - 14);
 
   if (!gameRunning && !gameOver) {
     drawStartScreen();

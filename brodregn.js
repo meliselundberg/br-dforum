@@ -12,7 +12,7 @@ const modalText = document.getElementById("modalText");
 const GAME_WIDTH = 900;
 const GAME_HEIGHT = 640;
 
-const winningScore = 50;
+const winningScore = 100;
 const maxMisses = 3;
 
 let score = 0;

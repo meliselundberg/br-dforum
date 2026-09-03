@@ -389,9 +389,10 @@ function renderProfilePage(orderText) {
       <div class="profile-hero">
         <div class="profile-hero-inner">
           <img
+            id="profileAvatar"
             class="profile-avatar profile-photo"
-            src="yeastpb.png"
-            alt="Bröder Yeast Mode"
+            alt=""
+            src="yeastpb.png?v=2"
           >
           <div>
             <h2 class="profile-name">broderanneli</h2>

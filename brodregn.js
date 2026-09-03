@@ -172,7 +172,7 @@ function getRatChance() {
 
 function spawnItem() {
   const isRat = Math.random() < getRatChance();
-  const size = isRat ? random(46, 58) : random(38, 50);
+  const size = isRat ? random(58, 74) : random(52, 68);
 
   fallingItems.push({
     type: isRat ? "rat" : "bread",

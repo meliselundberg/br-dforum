@@ -1,87 +1,145 @@
+.game-page {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 1080px;
+}
+
 .bread-game-card {
   overflow: hidden;
-  padding: 22px;
-  background: linear-gradient(180deg, rgba(255, 250, 242, 0.97), rgba(250, 239, 223, 0.94));
-  border: 1px solid rgba(202, 167, 122, 0.55);
-  border-radius: 28px;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(255, 246, 226, 0.95), transparent 26%),
+    radial-gradient(circle at 92% 8%, rgba(232, 201, 133, 0.22), transparent 28%),
+    linear-gradient(180deg, rgba(255, 250, 242, 0.98), rgba(246, 226, 199, 0.96));
+  border: 1px solid rgba(202, 167, 122, 0.65);
+  border-radius: 32px;
   box-shadow: var(--shadow);
 }
 
-.game-top {
+.game-intro {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-bottom: 16px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 18px;
 }
 
-.game-top > div {
-  padding: 14px 16px;
-  background: #fffaf2;
-  border: 1px solid rgba(202, 167, 122, 0.5);
-  border-radius: 18px;
-  box-shadow: var(--shadow-soft);
-}
-
-.game-label {
+.mini-label {
   margin-bottom: 4px;
   color: var(--muted);
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.6px;
+  letter-spacing: 1.2px;
 }
 
-.game-number {
+.game-intro h2 {
+  margin: 0;
   color: #7f261d;
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 34px;
-  font-weight: 700;
-  line-height: 1;
+  font-size: clamp(46px, 7vw, 78px);
+  line-height: 0.9;
+}
+
+.game-intro p {
+  max-width: 650px;
+  margin: 12px 0 0;
+  color: var(--text-soft);
+  font-size: 16px;
+  line-height: 1.55;
+  font-weight: 600;
+}
+
+.canvas-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 30px;
+  border: 2px solid rgba(127, 38, 29, 0.18);
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.95), transparent 18%),
+    radial-gradient(circle at 82% 18%, rgba(232, 201, 133, 0.35), transparent 22%),
+    linear-gradient(180deg, #fff8ea 0%, #f0d2a6 100%);
+  box-shadow:
+    inset 0 0 0 7px rgba(255, 255, 255, 0.32),
+    0 18px 38px rgba(87, 49, 20, 0.13);
 }
 
 #gameCanvas {
   display: block;
   width: 100%;
-  max-width: 760px;
   height: auto;
-  margin: 0 auto;
-  background:
-    radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.9), transparent 24%),
-    linear-gradient(180deg, #fff7ea 0%, #f3dcc0 100%);
-  border: 2px solid rgba(202, 167, 122, 0.7);
-  border-radius: 24px;
-  box-shadow: inset 0 0 0 6px rgba(255, 255, 255, 0.28);
+  min-height: 560px;
   touch-action: none;
 }
 
+.game-hud {
+  position: absolute;
+  z-index: 5;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.hud-box {
+  min-width: 132px;
+  padding: 10px 14px 11px;
+  background: rgba(255, 250, 242, 0.88);
+  border: 1px solid rgba(127, 38, 29, 0.16);
+  border-radius: 18px;
+  box-shadow: 0 10px 24px rgba(69, 36, 13, 0.13);
+  backdrop-filter: blur(5px);
+}
+
+.hud-box span {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.hud-box strong {
+  display: block;
+  color: #7f261d;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 32px;
+  line-height: 1;
+}
+
 .game-instructions {
-  margin-top: 14px;
+  margin-top: 16px;
   color: var(--text-soft);
   font-size: 15px;
   line-height: 1.55;
   text-align: center;
+  font-weight: 600;
+}
+
+.separator {
+  margin: 0 8px;
+  color: var(--muted);
 }
 
 .game-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 170px;
-  margin: 16px auto 0;
-  padding: 13px 18px;
+  min-width: 176px;
+  padding: 13px 19px;
   cursor: pointer;
   border: none;
   border-radius: 999px;
   color: #fff9ef;
   background: linear-gradient(135deg, #d6a85f 0%, #b77731 100%);
-  box-shadow: 0 12px 22px rgba(161, 104, 41, 0.2);
+  box-shadow: 0 12px 22px rgba(161, 104, 41, 0.22);
   font-family: "Inter", Arial, sans-serif;
   font-size: 15px;
-  font-weight: 800;
-}
-
-#startButton {
-  display: flex;
+  font-weight: 900;
 }
 
 .game-button:hover {
@@ -90,7 +148,6 @@
 }
 
 .game-button.secondary {
-  margin-left: 8px;
   background: linear-gradient(135deg, #9f4a3a 0%, #7f261d 100%);
 }
 
@@ -100,8 +157,8 @@
   inset: 0;
   z-index: 9999;
   padding: 22px;
-  background: rgba(57, 34, 18, 0.48);
-  backdrop-filter: blur(7px);
+  background: rgba(57, 34, 18, 0.5);
+  backdrop-filter: blur(8px);
 }
 
 .game-modal.show {
@@ -110,65 +167,100 @@
 }
 
 .game-modal-box {
-  width: min(92vw, 520px);
-  padding: 28px;
+  width: min(92vw, 540px);
+  padding: 32px 28px;
   text-align: center;
-  background: linear-gradient(180deg, #fffaf2, #f6e7d1);
-  border: 1px solid rgba(202, 167, 122, 0.72);
-  border-radius: 28px;
-  box-shadow: 0 30px 80px rgba(55, 29, 12, 0.26);
+  background:
+    radial-gradient(circle at 20% 12%, rgba(255, 247, 232, 0.95), transparent 28%),
+    linear-gradient(180deg, #fffaf2, #f6e2c7);
+  border: 1px solid rgba(202, 167, 122, 0.8);
+  border-radius: 32px;
+  box-shadow: 0 30px 80px rgba(55, 29, 12, 0.3);
 }
 
 .game-modal-title {
   color: #7f261d;
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 54px;
+  font-size: clamp(48px, 10vw, 76px);
   font-weight: 700;
-  line-height: 1;
+  line-height: 0.9;
 }
 
 .game-modal-text {
-  margin-top: 12px;
+  margin-top: 16px;
   color: var(--text);
-  font-size: 22px;
-  font-weight: 800;
+  font-size: 23px;
+  font-weight: 900;
   line-height: 1.35;
   white-space: pre-line;
 }
 
-@media (max-width: 620px) {
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 760px) {
+  .game-page {
+    margin-top: 16px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
   .bread-game-card {
-    padding: 14px;
+    padding: 12px;
+    border-radius: 24px;
+  }
+
+  .game-intro {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .game-intro h2 {
+    font-size: 54px;
+  }
+
+  .game-intro p {
+    font-size: 14px;
+  }
+
+  .canvas-wrap {
     border-radius: 22px;
   }
 
-  .game-top {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .game-number {
-    font-size: 30px;
-  }
-
   #gameCanvas {
-    border-radius: 18px;
+    min-height: 70vh;
   }
 
-  .game-modal-title {
-    font-size: 42px;
+  .game-hud {
+    top: 10px;
+    left: 10px;
+    right: 10px;
   }
 
-  .game-modal-text {
-    font-size: 19px;
+  .hud-box {
+    min-width: 104px;
+    padding: 8px 10px 9px;
+    border-radius: 15px;
+  }
+
+  .hud-box strong {
+    font-size: 26px;
   }
 
   .game-button {
     width: 100%;
-    margin-top: 12px;
   }
 
-  .game-button.secondary {
-    margin-left: 0;
+  .separator {
+    display: none;
+  }
+
+  .game-modal-text {
+    font-size: 20px;
   }
 }
